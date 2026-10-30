@@ -1,0 +1,115 @@
+---
+import "./Header.css";
+
+const navItems = [
+  { label: "Главная", href: "/", active: true },
+  { label: "Меню", href: "#menu" },
+  { label: "О нас", href: "#about" },
+  { label: "Наши кофейни", href: "#locations" },
+  { label: "Блог", href: "#blog" },
+  { label: "FAQ", href: "#faq" },
+];
+---
+
+<header class="site-header">
+  <div class="header-shell">
+    <a class="brand" href="/" aria-label="StreetCoffe — главная">
+      <span class="brand-word">STREET</span>
+
+      <img
+        class="brand-logo"
+        src="/header/logo.png"
+        alt=""
+        width="68"
+        height="68"
+        fetchpriority="high"
+      />
+
+      <span class="brand-word">COFFEE</span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="Основная навигация">
+      {navItems.map((item) => (
+        <a
+          class:list={["nav-link", { "is-active": item.active }]}
+          href={item.href}
+          aria-current={item.active ? "page" : undefined}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <a class="header-cta" href="/menu">
+      <span class="cta-icon" aria-hidden="true">
+        <img class="cta-icon-white" src="/icons/CupCoffe.svg" alt="" />
+        <img class="cta-icon-black" src="/icons/CupCoffe_Black.svg" alt="" />
+      </span>
+      <span class="header-cta-label">Посмотреть меню</span>
+      <svg class="cta-arrow" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="m9 5 7 7-7 7" />
+      </svg>
+    </a>
+
+    <button
+      class="menu-toggle"
+      type="button"
+      aria-label="Открыть меню"
+      aria-expanded="false"
+      aria-controls="mobile-navigation"
+    >
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <nav class="mobile-nav" id="mobile-navigation" aria-label="Мобильная навигация" hidden>
+    {navItems.map((item) => (
+      <a
+        class:list={["mobile-nav-link", { "is-active": item.active }]}
+        href={item.href}
+        aria-current={item.active ? "page" : undefined}
+      >
+        {item.label}
+      </a>
+    ))}
+    <a class="mobile-nav-cta" href="/menu">
+      <img src="/icons/CupCoffe_Black.svg" alt="" aria-hidden="true" />
+      <span>Посмотреть меню</span>
+      <span class="mobile-cta-arrow" aria-hidden="true">↗</span>
+    </a>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>(".menu-toggle");
+  const mobileNav = document.querySelector<HTMLElement>("#mobile-navigation");
+
+  if (toggle && mobileNav) {
+    const closeMenu = () => {
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.setAttribute("aria-label", "Открыть меню");
+      mobileNav.hidden = true;
+      document.body.classList.remove("menu-is-open");
+    };
+
+    toggle.addEventListener("click", () => {
+      const isOpen = toggle.getAttribute("aria-expanded") === "true";
+      toggle.setAttribute("aria-expanded", String(!isOpen));
+      toggle.setAttribute("aria-label", isOpen ? "Открыть меню" : "Закрыть меню");
+      mobileNav.hidden = isOpen;
+      document.body.classList.toggle("menu-is-open", !isOpen);
+    });
+
+    mobileNav.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", closeMenu);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeMenu();
+    });
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 1100) closeMenu();
+    });
+  }
+</script>

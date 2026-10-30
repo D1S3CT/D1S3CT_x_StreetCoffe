@@ -1,0 +1,16 @@
+---
+import "../styles/global.css";
+interface Props { title?: string; description?: string; }
+const { title = "StreetCoffe — кофейная атмосфера в Тольятти", description = "Кофе, авторские напитки и Bubble Tea в кофейнях StreetCoffe." } = Astro.props;
+---
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#080808" />
+    <title>{title}</title>
+  </head>
+  <body><slot /></body>
+</html>
