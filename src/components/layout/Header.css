@@ -338,8 +338,12 @@
   }
 
   .mobile-cta-arrow {
+    display: block;
+    width: 20px;
+    height: 20px;
+    flex: 0 0 20px;
     margin-left: auto;
-    font-size: 18px;
+    object-fit: contain;
   }
 
   body.menu-is-open { overflow: hidden; }
