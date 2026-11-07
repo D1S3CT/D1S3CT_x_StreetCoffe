@@ -1,0 +1,325 @@
+---
+import "./MenuCatalog.css";
+import { products, categoryLabels, getCatalogPrice } from "../../data/products";
+
+const serializedProducts = JSON.stringify(products);
+const filters = [
+  { id: "all", label: "Все напитки", icon: "▦" },
+  { id: "coffee", label: "Кофе", icon: "♨" },
+  { id: "bubble-tea", label: "Bubble Tea", icon: "◉" },
+  { id: "cold", label: "Холодные напитки", icon: "❄" },
+  { id: "tea", label: "Чай", icon: "♧" },
+  { id: "other", label: "Другое", icon: "•••" },
+];
+
+const initialProducts = products.map((product) => ({
+  id: product.id,
+  name: product.name,
+  category: product.category,
+  categoryLabel: categoryLabels[product.category],
+  tags: product.tags,
+  sizes: product.sizes,
+  catalogPrice: getCatalogPrice(product),
+  description: product.description,
+  composition: product.composition,
+  gallery: product.gallery,
+  image: product.image,
+  isAvailable: product.isAvailable,
+}));
+---
+
+<section class="menu-page">
+  <div class="menu-page__decor menu-page__decor--beans" aria-hidden="true"></div>
+  <div class="menu-page__decor menu-page__decor--leaf" aria-hidden="true"></div>
+
+  <div class="menu-container">
+    <nav class="menu-breadcrumbs" aria-label="Хлебные крошки">
+      <a href="/">Главная</a><span>›</span><span aria-current="page">Меню</span>
+    </nav>
+
+    <header class="menu-heading">
+      <div>
+        <p class="menu-eyebrow">StreetCoffe / напитки</p>
+        <h1>Наше <span>меню</span></h1>
+        <p class="menu-heading__description">
+          Классический кофе, яркий Bubble Tea, освежающие напитки и авторские рецепты —
+          <br class="desktop-only" />всё, что ты любишь, в одном месте.
+        </p>
+      </div>
+      <p class="menu-handwriting" aria-hidden="true">Больше<br />чем кофе <span>♡</span></p>
+    </header>
+
+    <div class="menu-toolbar">
+      <div class="menu-filters" role="group" aria-label="Фильтр по категориям">
+        {filters.map((filter, index) => (
+          <button
+            class:list={["menu-filter", { "is-active": index === 0 }]}
+            type="button"
+            data-filter={filter.id}
+            aria-pressed={index === 0 ? "true" : "false"}
+          >
+            <span class="menu-filter__icon" aria-hidden="true">{filter.icon}</span>
+            <span>{filter.label}</span>
+          </button>
+        ))}
+      </div>
+
+      <label class="menu-search">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+        <input id="menu-search-input" type="search" placeholder="Найти напиток..." autocomplete="off" />
+        <button class="menu-search__clear" id="menu-search-clear" type="button" aria-label="Очистить поиск" hidden>×</button>
+      </label>
+    </div>
+
+    <div class="menu-workspace">
+      <section class="menu-results" aria-label="Каталог напитков">
+        <div class="menu-results__topline">
+          <p id="menu-results-count" aria-live="polite"></p>
+          <button id="menu-reset" class="menu-reset" type="button">Сбросить фильтры</button>
+        </div>
+        <div class="product-grid" id="product-grid"></div>
+        <div class="menu-empty" id="menu-empty" hidden>
+          <span class="menu-empty__icon">⌕</span>
+          <h2>Ничего не нашлось</h2>
+          <p>Попробуй изменить запрос или выбрать другую категорию.</p>
+          <button type="button" id="menu-empty-reset">Показать все напитки</button>
+        </div>
+      </section>
+
+      <aside class="product-detail" id="product-detail" aria-label="Информация о выбранном напитке">
+        <button class="product-detail__close" id="detail-close" type="button" aria-label="Закрыть подробности">×</button>
+        <div class="product-detail__visual" id="detail-visual">
+          <div class="product-detail__visual-copy">
+            <span class="product-detail__category" id="detail-category"></span>
+            <h2 id="detail-name"></h2>
+            <p id="detail-description"></p>
+          </div>
+          <div class="product-detail__image-wrap" id="detail-image-wrap"></div>
+          <div class="product-detail__visual-stamp" aria-hidden="true">STREET<br />COFFEE</div>
+        </div>
+
+        <div class="product-detail__body">
+          <div class="product-detail__section">
+            <div class="product-detail__section-heading">
+              <h3>Выберите объём</h3>
+              <span id="detail-size-hint">Доступные размеры</span>
+            </div>
+            <div class="product-sizes" id="detail-sizes"></div>
+          </div>
+          <div class="product-detail__bottom">
+            <div>
+              <span class="product-detail__price-caption">Стоимость</span>
+              <strong id="detail-price"></strong>
+            </div>
+            <span class="product-detail__note">Выбранный напиток</span>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script type="application/json" id="menu-products" set:html={JSON.stringify(initialProducts)}></script>
+</section>
+
+<script>
+  type CatalogProduct = {
+    id: string;
+    name: string;
+    category: string;
+    categoryLabel: string;
+    tags: string[];
+    sizes: { label: string; volumeMl: number | null; price: number }[];
+    catalogPrice?: { label: string; volumeMl: number | null; price: number };
+    description: string;
+    composition: string[];
+    gallery: string[];
+    image: string;
+    isAvailable: boolean;
+  };
+
+  const dataNode = document.querySelector<HTMLScriptElement>("#menu-products");
+  const grid = document.querySelector<HTMLElement>("#product-grid");
+  const searchInput = document.querySelector<HTMLInputElement>("#menu-search-input");
+  const clearSearch = document.querySelector<HTMLButtonElement>("#menu-search-clear");
+  const resultCount = document.querySelector<HTMLElement>("#menu-results-count");
+  const emptyState = document.querySelector<HTMLElement>("#menu-empty");
+  const detail = document.querySelector<HTMLElement>("#product-detail");
+
+  if (dataNode && grid && searchInput && clearSearch && resultCount && emptyState && detail) {
+    const products = JSON.parse(dataNode.textContent || "[]") as CatalogProduct[];
+    let activeFilter = "all";
+    let selectedId: string | null = products[0]?.id ?? null;
+    let selectedSizeIndex = 0;
+
+    const escapeHtml = (value: string) =>
+      value.replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+      })[char] || char);
+
+    const formatPrice = (price: number) =>
+      `${new Intl.NumberFormat("ru-RU").format(price)} ₽`;
+
+    const productImage = (product: CatalogProduct, className: string) => {
+      if (product.image) {
+        return `<img class="${className}" src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" loading="lazy">`;
+      }
+      return `<div class="${className} product-image-placeholder" aria-label="Фотография ${escapeHtml(product.name)}">
+        <span class="product-image-placeholder__mark">SC</span>
+        <span class="product-image-placeholder__caption">STREET COFFEE</span>
+      </div>`;
+    };
+
+    const matchesFilter = (product: CatalogProduct) => {
+      if (activeFilter === "all") return true;
+      if (activeFilter === "other") return product.category === "hot" || product.category === "milkshakes" || product.category === "other";
+      if (activeFilter === "bubble-tea") return product.category === "bubble-tea";
+      return product.category === activeFilter;
+    };
+
+    const visibleProducts = () => {
+      const query = searchInput.value.trim().toLocaleLowerCase("ru");
+      return products.filter((product) => {
+        const searchable = [
+          product.name,
+          product.categoryLabel,
+          ...product.tags,
+        ].join(" ").toLocaleLowerCase("ru");
+        return matchesFilter(product) && (!query || searchable.includes(query));
+      });
+    };
+
+    const renderGrid = () => {
+      const visible = visibleProducts();
+      resultCount.textContent = `${visible.length} ${visible.length === 1 ? "напиток" : visible.length < 5 ? "напитка" : "напитков"}`;
+      emptyState.hidden = visible.length > 0;
+      grid.hidden = visible.length === 0;
+
+      grid.innerHTML = visible.map((product) => {
+        const price = product.catalogPrice || product.sizes[0];
+        const selected = product.id === selectedId;
+        return `<article class="product-card ${selected ? "is-selected" : ""}" data-product-card="${escapeHtml(product.id)}">
+          <button class="product-card__open" type="button" data-select-product="${escapeHtml(product.id)}" aria-label="Подробнее: ${escapeHtml(product.name)}">
+            <div class="product-card__photo">
+              ${productImage(product, "product-card__image")}
+              <span class="product-card__category">${escapeHtml(product.categoryLabel)}</span>
+              <span class="product-card__plus" aria-hidden="true">+</span>
+            </div>
+            <div class="product-card__info">
+              <h2>${escapeHtml(product.name)}</h2>
+              <p>${escapeHtml(product.description || product.tags.slice(0, 2).join(" · ") || product.categoryLabel)}</p>
+              <div class="product-card__price-row">
+                <span>${escapeHtml(price?.label || "Цена")}</span>
+                <strong>${price ? formatPrice(price.price) : "Уточняйте"}</strong>
+              </div>
+            </div>
+          </button>
+        </article>`;
+      }).join("");
+
+      if (selectedId && !visible.some((product) => product.id === selectedId)) {
+        selectedId = visible[0]?.id ?? null;
+        selectedSizeIndex = 0;
+      } else if (!selectedId && visible.length) {
+        selectedId = visible[0].id;
+      }
+      renderDetail();
+      grid.querySelectorAll<HTMLButtonElement>("[data-select-product]").forEach((button) => {
+        button.addEventListener("click", () => selectProduct(button.dataset.selectProduct || ""));
+      });
+    };
+
+    const renderDetail = () => {
+      const product = products.find((item) => item.id === selectedId);
+      const closeButton = detail.querySelector<HTMLButtonElement>("#detail-close");
+      if (!product) {
+        detail.classList.remove("is-open");
+        return;
+      }
+
+      if (selectedSizeIndex >= product.sizes.length) selectedSizeIndex = 0;
+      const size = product.sizes[selectedSizeIndex] || product.catalogPrice || product.sizes[0];
+
+      detail.classList.add("is-open");
+      detail.querySelector<HTMLElement>("#detail-category")!.textContent = product.categoryLabel;
+      detail.querySelector<HTMLElement>("#detail-name")!.textContent = product.name;
+      detail.querySelector<HTMLElement>("#detail-description")!.textContent =
+        product.description || "Подробная информация о напитке скоро появится.";
+      detail.querySelector<HTMLElement>("#detail-image-wrap")!.innerHTML = productImage(product, "product-detail__image");
+      detail.querySelector<HTMLElement>("#detail-price")!.textContent = size ? formatPrice(size.price) : "Уточняйте";
+
+      const sizes = detail.querySelector<HTMLElement>("#detail-sizes")!;
+      sizes.innerHTML = product.sizes.map((item, index) => `
+        <button class="product-size ${index === selectedSizeIndex ? "is-active" : ""}" type="button" data-size-index="${index}" aria-pressed="${index === selectedSizeIndex}">
+          <span>${escapeHtml(item.label)}</span>
+          <strong>${formatPrice(item.price)}</strong>
+        </button>
+      `).join("");
+
+      sizes.querySelectorAll<HTMLButtonElement>("[data-size-index]").forEach((button) => {
+        button.addEventListener("click", () => {
+          selectedSizeIndex = Number(button.dataset.sizeIndex || 0);
+          renderDetail();
+          renderGridSelection();
+        });
+      });
+      closeButton?.addEventListener("click", closeDetail, { once: true });
+    };
+
+    const renderGridSelection = () => {
+      grid.querySelectorAll<HTMLElement>("[data-product-card]").forEach((card) => {
+        card.classList.toggle("is-selected", card.dataset.productCard === selectedId);
+      });
+    };
+
+    const selectProduct = (id: string) => {
+      if (!products.some((product) => product.id === id)) return;
+      selectedId = id;
+      selectedSizeIndex = 0;
+      renderGridSelection();
+      renderDetail();
+      detail.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    };
+
+    const closeDetail = () => detail.classList.remove("is-open");
+
+    document.querySelectorAll<HTMLButtonElement>("[data-filter]").forEach((button) => {
+      button.addEventListener("click", () => {
+        activeFilter = button.dataset.filter || "all";
+        document.querySelectorAll("[data-filter]").forEach((item) => {
+          const active = item === button;
+          item.classList.toggle("is-active", active);
+          item.setAttribute("aria-pressed", String(active));
+        });
+        renderGrid();
+      });
+    });
+
+    searchInput.addEventListener("input", () => {
+      clearSearch.hidden = searchInput.value.length === 0;
+      renderGrid();
+    });
+
+    const reset = () => {
+      activeFilter = "all";
+      searchInput.value = "";
+      clearSearch.hidden = true;
+      document.querySelectorAll<HTMLButtonElement>("[data-filter]").forEach((button) => {
+        const active = button.dataset.filter === "all";
+        button.classList.toggle("is-active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+      renderGrid();
+    };
+
+    clearSearch.addEventListener("click", () => {
+      searchInput.value = "";
+      clearSearch.hidden = true;
+      renderGrid();
+      searchInput.focus();
+    });
+    document.querySelector<HTMLButtonElement>("#menu-reset")?.addEventListener("click", reset);
+    document.querySelector<HTMLButtonElement>("#menu-empty-reset")?.addEventListener("click", reset);
+
+    renderGrid();
+  }
+</script>
