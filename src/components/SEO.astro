@@ -1,0 +1,132 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  noindex?: boolean;
+  ogImage?: string;
+  ogType?: "website" | "article";
+  additionalSchemas?: Record<string, unknown>[];
+}
+
+const {
+  title,
+  description,
+  noindex = false,
+  ogImage = "/og/streetcoffe.jpg",
+  ogType = "website",
+  additionalSchemas = [],
+} = Astro.props;
+
+const siteUrl = "https://улица-кофе.рф";
+
+const canonicalURL = new URL(
+  Astro.url.pathname,
+  siteUrl
+).href;
+
+const imageURL = new URL(ogImage, siteUrl).href;
+
+const robots = noindex
+  ? "noindex, nofollow"
+  : "index, follow, max-image-preview:large";
+
+const organizationId = `${siteUrl}/#organization`;
+const websiteId = `${siteUrl}/#website`;
+
+// Адреса кофеен StreetCoffe
+const locations = [
+  "Спортивная 31А",
+  "Юбилейная 91А",
+  "Юбилейная 55/2",
+  "Спортивная 3А",
+  "Революционная 54А",
+  "Приморский бульвар 37с1",
+  "Строителей 2А",
+  "Строителей 15",
+];
+
+// Schema.org для каждой кофейни
+const locationSchemas = locations.map((address, index) => ({
+  "@type": "CafeOrCoffeeShop",
+  "@id": `${siteUrl}/#location-${index + 1}`,
+  "name": `StreetCoffe — ${address}`,
+  "parentOrganization": {
+    "@id": organizationId
+  },
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": address,
+    "addressLocality": "Тольятти",
+    "addressCountry": "RU"
+  }
+}));
+
+// Общая структурированная разметка сайта
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": organizationId,
+      "name": "StreetCoffe",
+      "alternateName": "THE STREET COFFEE",
+      "url": siteUrl,
+      "description": "Сеть кофеен StreetCoffe в Тольятти. Кофе, Bubble Tea и авторские напитки.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Тольятти",
+        "addressCountry": "RU"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "@id": websiteId,
+      "url": siteUrl,
+      "name": "StreetCoffe",
+      "inLanguage": "ru-RU",
+      "publisher": {
+        "@id": organizationId
+      }
+    },
+
+    // Здесь подключаются все восемь кофеен
+    ...locationSchemas,
+
+    // Здесь можно добавлять дополнительную разметку
+    ...additionalSchemas
+  ]
+};
+---
+
+<title>{title}</title>
+
+<meta name="description" content={description} />
+<meta name="robots" content={robots} />
+<meta name="googlebot" content={robots} />
+
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Open Graph -->
+<meta property="og:type" content={ogType} />
+<meta property="og:locale" content="ru_RU" />
+<meta property="og:site_name" content="StreetCoffe" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:image" content={imageURL} />
+<meta
+  property="og:image:alt"
+  content="StreetCoffe — сеть кофеен в Тольятти"
+/>
+
+<!-- Twitter Cards -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={imageURL} />
+
+<!-- Schema.org JSON-LD -->
+<script
+  type="application/ld+json"
+  set:html={JSON.stringify(structuredData)}
+/>
