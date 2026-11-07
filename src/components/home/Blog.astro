@@ -1,0 +1,113 @@
+---
+import "./Blog.css";
+
+const blogCategories = [
+  {
+    id: "coffee",
+    title: "Всё о кофе",
+    description: "Сорта, способы приготовления и интересные факты о кофе",
+    icon: "/icons/coffee-cup.svg",
+    href: "/coffee",
+  },
+  {
+    id: "bubble-tea",
+    title: "Мир Bubble Tea",
+    description: "Вкусы, топпинги и почему его все любят",
+    icon: "/icons/bubble-tea.svg",
+    href: "/bubble-tea",
+  },
+  {
+    id: "locations",
+    title: "Наши кофейни",
+    description: "Адреса, атмосфера и особенности каждой точки в Тольятти",
+    icon: "/icons/location.svg",
+    href: "/locations",
+  },
+  {
+    id: "life",
+    title: "Жизнь StreetCoffe",
+    description: "Новости, сезонные напитки и истории нашей команды",
+    icon: "/icons/heart.svg",
+    href: "/streetcoffe-life",
+  },
+];
+---
+
+<section class="blog" id="blog">
+  <div class="blog__container">
+
+    <!-- Декоративный фон -->
+    <div class="blog__decor" aria-hidden="true">
+      <img
+        class="blog__stamp"
+        src="/images/blog/streetcoffe-stamp.svg"
+        alt=""
+      />
+
+      <img
+        class="blog__bean"
+        src="/images/blog/coffee-bean.png"
+        alt=""
+      />
+
+      <img
+        class="blog__decor-arrow"
+        src="/icons/hand-drawn-arrow.svg"
+        alt=""
+      />
+    </div>
+
+    <!-- Заголовок -->
+    <header class="blog__header">
+      <div class="blog__intro">
+        <p class="blog__eyebrow">Полезные статьи</p>
+
+        <h1 class="blog__title">
+          StreetCoffe —
+          <span>сеть кофеен</span>
+          в Тольятти
+        </h1>
+
+        <p class="blog__description">
+          Рассказываем о кофе, Bubble Tea, наших кофейнях
+          и вдохновляющих историях — всё, что делает
+          StreetCoffe ближе к тебе.
+        </p>
+      </div>
+
+      <p class="blog__handwriting" aria-hidden="true">
+        Больше<br />
+        чем кофе <span>♡</span>
+      </p>
+    </header>
+
+    <!-- Категории блога -->
+    <div class="blog__categories">
+      {blogCategories.map((category) => (
+        <a
+          class="blog-card"
+          href={category.href}
+          aria-label={`Перейти в раздел «${category.title}»`}
+        >
+          <div class="blog-card__top">
+            <div class="blog-card__icon">
+              <img src={category.icon} alt="" loading="lazy" />
+            </div>
+
+            <span class="blog-card__arrow" aria-hidden="true">
+              ›
+            </span>
+          </div>
+
+          <div class="blog-card__content">
+            <h2 class="blog-card__title">{category.title}</h2>
+            <p class="blog-card__description">
+              {category.description}
+            </p>
+          </div>
+        </a>
+      ))}
+    </div>
+
+  </div>
+</section>

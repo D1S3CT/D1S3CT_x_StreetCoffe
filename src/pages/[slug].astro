@@ -1,0 +1,648 @@
+---
+import { getCollection, render } from "astro:content";
+import BlogLayout from "../layouts/BlogLayout.astro";
+
+export async function getStaticPaths() {
+  const articles = await getCollection("articles");
+
+  console.log(
+    "Найденные статьи:",
+    articles.map((article) => ({
+      id: article.id,
+      title: article.data.title,
+    }))
+  );
+
+  return articles.map((article) => ({
+    params: {
+      slug: article.id,
+    },
+    props: {
+      article,
+    },
+  }));
+}
+
+const { article } = Astro.props;
+
+const { Content, headings } = await render(article);
+
+const {
+  title,
+  description,
+  category,
+  readingTime,
+  heroImage,
+  promoImage,
+} = article.data;
+
+const allArticles = await getCollection("articles");
+
+const otherArticles = allArticles.filter(
+  (item) => item.id !== article.id
+);
+---
+
+<BlogLayout title={title} description={description}>
+
+  <main class="article-page">
+
+    <section class="article-hero">
+      <div class="article-hero__inner">
+
+        <p class="article-hero__crumb">
+          <a href="/">Главная</a>
+          <span>›</span>
+          <a href="/#blog">Статьи</a>
+          <span>›</span>
+          {category}
+        </p>
+
+        <div class="article-hero__copy">
+          <p class="article-hero__eyebrow">Статьи</p>
+
+          <h1>{title}</h1>
+
+          <p class="article-hero__description">
+            {description}
+          </p>
+
+          <div class="article-hero__meta">
+            {article.data.date && <span>{article.data.date}</span>}
+            {readingTime && <span>{readingTime}</span>}
+            {category && <span>{category}</span>}
+          </div>
+        </div>
+
+        {heroImage && (
+          <img
+            class="article-hero__image"
+            src={heroImage}
+            alt={title}
+            fetchpriority="high"
+          />
+        )}
+
+      </div>
+    </section>
+
+
+    <div class="article-layout">
+
+      <article class="article-content">
+        <Content />
+      </article>
+
+
+      <aside class="article-sidebar">
+
+        {headings.some((heading) => heading.depth === 2) && (
+          <section class="article-side-card">
+
+            <h2>
+              <img src="/icons/article.svg" alt="" />
+              Содержание статьи
+            </h2>
+
+            <ol>
+              {headings
+                .filter((heading) => heading.depth === 2)
+                .map((heading, index) => (
+                  <li>
+                    <a href={`#${heading.slug}`}>
+                      <span>{index + 1}</span>
+                      {heading.text}
+                    </a>
+                  </li>
+                ))}
+            </ol>
+
+          </section>
+        )}
+
+
+        <a class="article-promo" href="/menu">
+
+          {promoImage && (
+            <img src={promoImage} alt="" loading="lazy" />
+          )}
+
+          <span>
+            Попробуй<br />
+            новые вкусы<br />
+            в StreetCoffe
+          </span>
+
+          <b>
+            Посмотреть меню <i>›</i>
+          </b>
+
+        </a>
+
+
+        <section class="article-side-card article-side-card--links">
+
+          <h2>Другие статьи</h2>
+
+          {otherArticles.map((item) => (
+            <a href={`/${item.data.slug}`}>
+              {item.data.title}
+              <span>›</span>
+            </a>
+          ))}
+
+        </section>
+
+      </aside>
+
+    </div>
+
+  </main>
+
+</BlogLayout>
+
+
+<style>
+
+/* =====================================
+   ARTICLE
+===================================== */
+
+.article-page {
+  color: #171717;
+  background: #fff;
+}
+
+
+/* =====================================
+   HERO
+===================================== */
+
+/* =====================================
+   ARTICLE HERO
+===================================== */
+
+.article-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  color: #fff;
+  background: #080808;
+}
+
+/* Контент Hero */
+
+.article-hero__inner {
+  position: relative;
+  z-index: 1;
+
+  width: min(92%, 1440px);
+  min-height: 440px;
+
+  margin: auto;
+  padding: 30px 0 130px;
+}
+
+/* Белая волна в нижней части Hero */
+
+.article-hero::after {
+  content: "";
+
+  position: absolute;
+  z-index: 3;
+
+  right: 0;
+  bottom: -1px;
+  left: 0;
+
+  height: 104px;
+
+  background: #fff;
+
+  clip-path: polygon(
+    0 10%,
+    12% 24%,
+    28% 56%,
+    50% 88%,
+    72% 56%,
+    88% 24%,
+    100% 10%,
+    100% 100%,
+    0 100%
+  );
+
+  pointer-events: none;
+}
+
+.article-hero__crumb {
+  position: relative;
+  z-index: 2;
+  color: #ddd;
+  font-size: 13px;
+}
+
+.article-hero__crumb a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.article-hero__crumb a:hover {
+  color: #d99a61;
+}
+
+.article-hero__crumb span {
+  padding: 0 9px;
+  color: #d99a61;
+}
+
+.article-hero__copy {
+  position: relative;
+  z-index: 2;
+  max-width: 560px;
+  padding-top: 35px;
+}
+
+.article-hero__eyebrow {
+  color: #d99a61;
+  font-size: 13px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+}
+
+.article-hero h1 {
+  margin: 8px 0 15px;
+  font-size: clamp(44px, 6vw, 76px);
+  line-height: .98;
+  letter-spacing: -.06em;
+}
+
+.article-hero__description {
+  max-width: 480px;
+  color: #e5e5e5;
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+.article-hero__meta {
+  display: flex;
+  gap: 24px;
+  margin-top: 25px;
+  color: #d6d6d6;
+  font-size: 13px;
+}
+
+.article-hero__image {
+  position: absolute;
+  top: 0;
+  right: -3%;
+  width: 58%;
+  height: 100%;
+  object-fit: cover;
+  opacity: .8;
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 25%
+  );
+}
+
+
+/* =====================================
+   ARTICLE LAYOUT
+===================================== */
+
+.article-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 330px;
+  gap: 44px;
+
+  width: min(88%, 1320px);
+  margin: 0 auto;
+  padding: 58px 0 100px;
+}
+
+
+/* =====================================
+   ARTICLE CONTENT
+===================================== */
+
+.article-content {
+  min-width: 0;
+  color: #424242;
+  font-size: 16px;
+  line-height: 1.75;
+}
+
+.article-content h2 {
+  margin: 34px 0 12px;
+  color: #111;
+  font-size: clamp(28px, 3vw, 39px);
+  font-weight: 850;
+  letter-spacing: -.05em;
+  line-height: 1.1;
+  scroll-margin-top: 110px;
+}
+
+.article-content h3 {
+  margin: 24px 0 8px;
+  color: #171717;
+  font-size: 23px;
+  scroll-margin-top: 110px;
+}
+
+.article-content p {
+  margin: 0 0 18px;
+}
+
+.article-content ul,
+.article-content ol {
+  padding-left: 23px;
+  margin: 0 0 22px;
+}
+
+.article-content li {
+  margin: 7px 0;
+}
+
+.article-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 15px;
+}
+
+
+/* =====================================
+   SIDEBAR
+===================================== */
+
+.article-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+
+/* =====================================
+   SIDEBAR CARD
+===================================== */
+
+.article-side-card {
+  padding: 23px;
+  border-radius: 18px;
+  background: #f8f4f0;
+}
+
+.article-side-card h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  margin: 0 0 18px;
+
+  color: #111;
+  font-size: 17px;
+}
+
+.article-side-card h2 img {
+  width: 23px;
+  height: 23px;
+}
+
+
+/* =====================================
+   TABLE OF CONTENTS
+===================================== */
+
+.article-side-card ol {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.article-side-card ol a {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  color: #333;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.article-side-card ol a:hover {
+  color: #c78349;
+}
+
+.article-side-card ol span {
+  display: grid;
+
+  width: 25px;
+  height: 25px;
+  flex: 0 0 25px;
+
+  place-items: center;
+
+  border-radius: 50%;
+  background: #fff;
+}
+
+
+/* =====================================
+   PROMO BANNER
+===================================== */
+
+.article-promo {
+  position: relative;
+
+  display: flex;
+  min-height: 210px;
+  flex-direction: column;
+  justify-content: space-between;
+
+  overflow: hidden;
+
+  padding: 22px;
+  border-radius: 17px;
+
+  background: #111;
+  color: #fff;
+  text-decoration: none;
+}
+
+.article-promo img {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  opacity: .68;
+}
+
+.article-promo span,
+.article-promo b {
+  position: relative;
+  z-index: 1;
+}
+
+.article-promo span {
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.article-promo b {
+  align-self: flex-start;
+
+  padding: 9px 14px;
+
+  border: 1px solid #d99a61;
+  border-radius: 30px;
+
+  font-size: 12px;
+}
+
+.article-promo i {
+  padding-left: 8px;
+  font-size: 18px;
+  font-style: normal;
+}
+
+
+/* =====================================
+   OTHER ARTICLES
+===================================== */
+
+.article-side-card--links {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.article-side-card--links h2 {
+  margin-bottom: 2px;
+}
+
+.article-side-card--links a {
+  display: flex;
+  justify-content: space-between;
+
+  color: #333;
+  font-size: 14px;
+  text-decoration: none;
+}
+
+.article-side-card--links a:hover {
+  color: #c78349;
+}
+
+.article-side-card--links a span {
+  color: #d99a61;
+  font-size: 23px;
+  line-height: .7;
+}
+
+
+/* =====================================
+   TABLET
+===================================== */
+
+@media (max-width: 900px) {
+
+  .article-layout {
+    grid-template-columns: 1fr;
+    width: min(90%, 720px);
+    gap: 30px;
+  }
+
+  .article-sidebar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .article-side-card--links {
+    grid-column: 1 / -1;
+  }
+
+  .article-hero__image {
+    right: -20%;
+    width: 75%;
+    opacity: .38;
+  }
+
+}
+
+
+/* =====================================
+   MOBILE
+===================================== */
+
+@media (max-width: 600px) {
+
+  .article-hero__inner {
+    width: calc(100% - 32px);
+    min-height: 410px;
+    padding-top: 18px;
+  }
+
+  .article-hero__copy {
+    padding-top: 48px;
+  }
+
+  .article-hero__description {
+    font-size: 15px;
+  }
+
+  .article-hero__meta {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .article-hero__image {
+    right: -55%;
+    width: 120%;
+    opacity: .25;
+  }
+
+  .article-layout {
+    width: calc(100% - 32px);
+    padding: 38px 0 65px;
+  }
+
+  .article-content {
+    font-size: 15px;
+  }
+
+  .article-sidebar {
+    display: flex;
+  }
+
+  .article-hero__inner {
+  min-height: 410px;
+  padding-bottom: 85px;
+}
+
+.article-hero::after {
+  height: 48px;
+
+  clip-path: polygon(
+    0 0,
+    25% 25%,
+    50% 55%,
+    75% 25%,
+    100% 0,
+    100% 100%,
+    0 100%
+  );
+}
+
+}
+
+</style>

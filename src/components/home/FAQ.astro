@@ -1,0 +1,144 @@
+---
+import "./FAQ.css";
+
+const questions = [
+  {
+    id: "locations",
+    icon: "/icons/location.svg",
+    question: "Где находятся кофейни StreetCoffe?",
+    answer: `Наши кофейни находятся в разных районах Тольятти.
+      Посмотреть адреса, расположение на карте и построить маршрут
+      можно в разделе «Наши кофейни».`,
+    link: "/#locations",
+    linkText: "Наши кофейни",
+  },
+  {
+    id: "menu",
+    icon: "/icons/document.svg",
+    question: "Какое меню представлено в кофейнях?",
+    answer: `В меню StreetCoffe представлены классический кофе,
+      Bubble Tea, холодные и авторские напитки. Посмотреть ассортимент
+      можно в каталоге.`,
+    link: "/menu/",
+    linkText: "Открыть меню",
+  },
+  {
+    id: "drinks",
+    icon: "/icons/coffee-cup.svg",
+    question: "Какие напитки можно заказать?",
+    answer: `Выбирай классические кофейные напитки, освежающие
+      холодные сочетания и авторские рецепты. Полный список напитков
+      и доступные варианты представлены в каталоге.`,
+    link: "/menu/",
+    linkText: "Посмотреть каталог",
+  },
+  {
+    id: "bubble-tea",
+    icon: "/icons/bubble-tea.svg",
+    question: "Есть ли Bubble Tea?",
+    answer: `Да, в StreetCoffe есть Bubble Tea — яркие напитки
+      с тапиокой и фруктовыми вкусами. Посмотреть варианты можно
+      в каталоге напитков.`,
+    link: "/menu/",
+    linkText: "Посмотреть Bubble Tea",
+  },
+  {
+    id: "prices",
+    icon: "/icons/coins.svg",
+    question: "Как узнать стоимость напитков?",
+    answer: `Актуальные цены и доступные объёмы указаны в карточках
+      напитков в каталоге. Выбери интересующую категорию и открой
+      нужный напиток.`,
+    link: "/menu/",
+    linkText: "Узнать стоимость",
+  },
+  {
+    id: "nearest",
+    icon: "/icons/navigation.svg",
+    question: "Как найти ближайшую кофейню?",
+    answer: `Открой раздел с нашими кофейнями: там собраны адреса
+      точек и карта Тольятти. Выбери удобную кофейню и построй маршрут.`,
+    link: "/#locations",
+    linkText: "Найти кофейню",
+  },
+];
+---
+
+<section class="faq" id="faq">
+  <div class="faq__container">
+
+    <!-- Заголовок -->
+    <header class="faq__header">
+      <div class="faq__heading">
+        <p class="faq__eyebrow">FAQ</p>
+
+        <h2 class="faq__title">
+          Часто задаваемые
+          <span>вопросы</span>
+        </h2>
+
+        <p class="faq__description">
+          Мы собрали ответы на самые популярные вопросы, чтобы тебе
+          было проще найти нужную информацию. Если не нашёл ответ —
+          напиши нам, мы всегда на связи!
+        </p>
+      </div>
+
+      <p class="faq__handwriting" aria-hidden="true">
+        Твой кофе.<br />
+        Твои вопросы.<br />
+        Наши ответы <span>♡</span>
+      </p>
+    </header>
+
+    <!-- Основная часть -->
+    <div class="faq__body">
+
+      <!-- Изображение напитка -->
+      <div class="faq__visual">
+        <img
+          class="faq__drink"
+          src="/images/home/faq-drink.webp"
+          alt="Холодный кофейный напиток StreetCoffe"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <!-- Список вопросов -->
+      <div class="faq__list">
+        {questions.map((item, index) => (
+          <details
+            class="faq-item"
+            name="streetcoffe-faq"
+            open={index === 0}
+          >
+            <summary class="faq-item__summary">
+              <span class="faq-item__icon">
+                <img src={item.icon} alt="" loading="lazy" />
+              </span>
+
+              <span class="faq-item__question">
+                {item.question}
+              </span>
+
+              <span class="faq-item__toggle" aria-hidden="true">
+                <span class="faq-item__plus"></span>
+              </span>
+            </summary>
+
+            <div class="faq-item__answer">
+              <p>{item.answer}</p>
+
+              <a href={item.link} class="faq-item__link">
+                {item.linkText}
+                <span aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </details>
+        ))}
+      </div>
+
+    </div>
+  </div>
+</section>

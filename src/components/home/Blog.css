@@ -1,0 +1,641 @@
+/* =========================================
+   STREETCOFFE — BLOG HERO
+========================================= */
+
+.blog {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  padding: 105px 0 75px;
+  overflow: hidden;
+  background: #fff;
+  color: #111;
+}
+
+.blog__container {
+  position: relative;
+  width: min(92%, 1600px);
+  margin: 0 auto;
+}
+
+/* =========================================
+   DECORATIONS
+========================================= */
+
+.blog__decor {
+  position: absolute;
+  z-index: -1;
+  top: -130px;
+  right: -7%;
+  width: 58%;
+  height: 600px;
+  pointer-events: none;
+}
+
+.blog__stamp {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(75%, 590px);
+  height: auto;
+  opacity: 0.09;
+  object-fit: contain;
+}
+
+.blog__bean {
+  position: absolute;
+  z-index: 1;
+  right: 17%;
+  bottom: -5px;
+  width: min(42%, 390px);
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 15px 20px rgba(50, 25, 10, 0.12));
+}
+
+/* Если изображение ещё не добавлено */
+.blog__bean:not([src]),
+.blog__stamp:not([src]),
+.blog__decor-arrow:not([src]) {
+  display: none;
+}
+
+.blog__decor-arrow {
+  position: absolute;
+  z-index: 2;
+  top: 55%;
+  left: 0;
+  width: 95px;
+  height: auto;
+  object-fit: contain;
+  transform: rotate(-8deg);
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.blog__header {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  min-height: 435px;
+  padding: 0 2%;
+}
+
+.blog__intro {
+  position: relative;
+  z-index: 2;
+  max-width: 720px;
+}
+
+.blog__eyebrow {
+  margin: 0 0 18px;
+  color: #858585;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.blog__title {
+  max-width: 720px;
+  margin: 0;
+  color: #080808;
+  font-size: clamp(54px, 5.5vw, 86px);
+  font-weight: 850;
+  letter-spacing: -0.065em;
+  line-height: 0.99;
+}
+
+.blog__title span {
+  display: block;
+  color: #d99a61;
+}
+
+.blog__description {
+  max-width: 650px;
+  margin: 22px 0 0;
+  color: #292929;
+  font-size: clamp(17px, 1.55vw, 23px);
+  font-weight: 400;
+  line-height: 1.42;
+}
+
+/* Рукописная надпись */
+
+.blog__handwriting {
+  position: absolute;
+  z-index: 2;
+  top: 70px;
+  right: 32%;
+
+  margin: 0;
+  color: #171717;
+
+  font-family: "Caveat", "Segoe Print", cursive;
+  font-size: clamp(32px, 3vw, 45px);
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  line-height: 0.9;
+
+  transform: rotate(-12deg);
+  pointer-events: none;
+}
+
+.blog__handwriting span {
+  display: inline-block;
+  margin-left: 4px;
+  font-family: "Caveat", cursive;
+  font-size: 1.2em;
+}
+
+/* =========================================
+   CATEGORY GRID
+========================================= */
+
+.blog__categories {
+  position: relative;
+  z-index: 3;
+
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+
+  margin-top: 0;
+}
+
+/* =========================================
+   CATEGORY CARD
+========================================= */
+
+.blog-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  min-width: 0;
+  min-height: 235px;
+  padding: 23px 26px;
+
+  overflow: hidden;
+  border: 1px solid rgba(238, 231, 224, 0.55);
+  border-radius: 24px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(250, 247, 244, 0.98),
+      rgba(247, 243, 239, 0.88)
+    );
+
+  color: #111;
+  text-decoration: none;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+
+.blog-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(217, 154, 97, 0.45);
+  background: #fbf7f2;
+  box-shadow: 0 15px 35px rgba(48, 31, 17, 0.08);
+}
+
+.blog-card:focus-visible {
+  outline: 3px solid #d99a61;
+  outline-offset: 4px;
+}
+
+/* Верх карточки */
+
+.blog-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+/* Иконка */
+
+.blog-card__icon {
+  display: grid;
+  place-items: center;
+
+  width: 68px;
+  height: 68px;
+  flex: 0 0 auto;
+
+  border-radius: 50%;
+  background: #f0c99f;
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease;
+}
+
+.blog-card__icon img {
+  display: block;
+  width: 39px;
+  height: 39px;
+  object-fit: contain;
+}
+
+.blog-card:hover .blog-card__icon {
+  background: #e5a15f;
+  transform: rotate(-7deg) scale(1.05);
+}
+
+/* Кнопка со стрелкой */
+
+.blog-card__arrow {
+  display: grid;
+  place-items: center;
+
+  width: 54px;
+  height: 54px;
+  flex: 0 0 auto;
+
+  border-radius: 50%;
+  background: #fff;
+
+  color: #111;
+  font-family: Arial, sans-serif;
+  font-size: 37px;
+  font-weight: 300;
+  line-height: 1;
+
+  box-shadow: 0 5px 15px rgba(40, 25, 15, 0.08);
+
+  transition:
+    transform 0.25s ease,
+    background 0.25s ease,
+    color 0.25s ease;
+}
+
+.blog-card:hover .blog-card__arrow {
+  transform: translateX(4px);
+  background: #111;
+  color: #fff;
+}
+
+/* Текст карточки */
+
+.blog-card__content {
+  margin-top: 17px;
+}
+
+.blog-card__title {
+  margin: 0 0 7px;
+  color: #080808;
+  font-size: clamp(18px, 1.55vw, 25px);
+  font-weight: 800;
+  letter-spacing: -0.045em;
+  line-height: 1.15;
+}
+
+.blog-card__description {
+  max-width: 300px;
+  margin: 0;
+
+  color: #555;
+  font-size: clamp(14px, 1.15vw, 18px);
+  font-weight: 400;
+  line-height: 1.42;
+}
+
+/* =========================================
+   LAPTOP
+========================================= */
+
+@media (max-width: 1250px) {
+  .blog {
+    padding: 85px 0 65px;
+  }
+
+  .blog__container {
+    width: 94%;
+  }
+
+  .blog__header {
+    min-height: 390px;
+  }
+
+  .blog__intro {
+    max-width: 650px;
+  }
+
+  .blog__title {
+    font-size: clamp(52px, 6vw, 74px);
+  }
+
+  .blog__description {
+    max-width: 570px;
+    font-size: 19px;
+  }
+
+  .blog__decor {
+    right: -9%;
+    width: 58%;
+  }
+
+  .blog__handwriting {
+    right: 28%;
+    font-size: 35px;
+  }
+
+  .blog__categories {
+    gap: 13px;
+  }
+
+  .blog-card {
+    min-height: 215px;
+    padding: 19px;
+    border-radius: 21px;
+  }
+
+  .blog-card__icon {
+    width: 59px;
+    height: 59px;
+  }
+
+  .blog-card__icon img {
+    width: 34px;
+    height: 34px;
+  }
+
+  .blog-card__arrow {
+    width: 47px;
+    height: 47px;
+    font-size: 33px;
+  }
+
+  .blog-card__title {
+    font-size: 19px;
+  }
+
+  .blog-card__description {
+    font-size: 15px;
+  }
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 900px) {
+  .blog {
+    padding: 65px 0 60px;
+  }
+
+  .blog__container {
+    width: calc(100% - 48px);
+  }
+
+  .blog__header {
+    min-height: 360px;
+    padding: 0;
+  }
+
+  .blog__intro {
+    max-width: 620px;
+  }
+
+  .blog__eyebrow {
+    font-size: 13px;
+  }
+
+  .blog__title {
+    font-size: clamp(48px, 8vw, 68px);
+  }
+
+  .blog__description {
+    max-width: 540px;
+    font-size: 17px;
+  }
+
+  .blog__decor {
+    top: -50px;
+    right: -15%;
+    width: 60%;
+    opacity: 0.75;
+  }
+
+  .blog__handwriting {
+    top: 35px;
+    right: 13%;
+    font-size: 30px;
+  }
+
+  .blog__categories {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+
+  .blog-card {
+    min-height: 210px;
+    padding: 21px;
+  }
+
+  .blog-card__title {
+    font-size: 21px;
+  }
+
+  .blog-card__description {
+    max-width: 320px;
+    font-size: 15px;
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+  .blog {
+    padding: 45px 0 50px;
+  }
+
+  .blog__container {
+    width: calc(100% - 32px);
+  }
+
+  .blog__header {
+    min-height: auto;
+    padding-bottom: 38px;
+  }
+
+  .blog__eyebrow {
+    margin-bottom: 12px;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+  }
+
+  .blog__title {
+    max-width: 100%;
+    font-size: clamp(40px, 10.2vw, 55px);
+    letter-spacing: -0.06em;
+    line-height: 1;
+  }
+
+  .blog__description {
+    max-width: 100%;
+    margin-top: 16px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .blog__handwriting {
+    display: none;
+  }
+
+  .blog__decor {
+    top: 35px;
+    right: -35%;
+    width: 85%;
+    height: 360px;
+    opacity: 0.35;
+  }
+
+  .blog__stamp {
+    width: 80%;
+  }
+
+  .blog__bean {
+    right: 15%;
+    bottom: 0;
+    width: 38%;
+  }
+
+  .blog__decor-arrow {
+    display: none;
+  }
+
+  /* Карточки */
+
+  .blog__categories {
+    grid-template-columns: 1fr;
+    gap: 11px;
+  }
+
+  .blog-card {
+    display: grid;
+    grid-template-columns: 64px minmax(0, 1fr) 43px;
+    align-items: center;
+    gap: 13px;
+
+    min-height: 112px;
+    padding: 15px 16px;
+    border-radius: 18px;
+  }
+
+  .blog-card__top {
+    display: contents;
+  }
+
+  .blog-card__icon {
+    grid-column: 1;
+    grid-row: 1;
+    width: 58px;
+    height: 58px;
+  }
+
+  .blog-card__icon img {
+    width: 33px;
+    height: 33px;
+  }
+
+  .blog-card__content {
+    grid-column: 2;
+    grid-row: 1;
+    min-width: 0;
+    margin: 0;
+  }
+
+  .blog-card__title {
+    margin-bottom: 5px;
+    font-size: 17px;
+  }
+
+  .blog-card__description {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .blog-card__arrow {
+    grid-column: 3;
+    grid-row: 1;
+    width: 40px;
+    height: 40px;
+    font-size: 29px;
+  }
+
+  .blog-card:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* =========================================
+   EXTRA SMALL MOBILE
+========================================= */
+
+@media (max-width: 380px) {
+  .blog__container {
+    width: calc(100% - 26px);
+  }
+
+  .blog__title {
+    font-size: 38px;
+  }
+
+  .blog-card {
+    grid-template-columns: 52px minmax(0, 1fr) 37px;
+    gap: 10px;
+    padding: 12px;
+  }
+
+  .blog-card__icon {
+    width: 49px;
+    height: 49px;
+  }
+
+  .blog-card__icon img {
+    width: 29px;
+    height: 29px;
+  }
+
+  .blog-card__title {
+    font-size: 15px;
+  }
+
+  .blog-card__description {
+    font-size: 12px;
+  }
+
+  .blog-card__arrow {
+    width: 36px;
+    height: 36px;
+    font-size: 26px;
+  }
+}
+
+/* =========================================
+   ACCESSIBILITY
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .blog *,
+  .blog *::before,
+  .blog *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

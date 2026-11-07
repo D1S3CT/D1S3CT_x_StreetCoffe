@@ -1,0 +1,1403 @@
+/* =========================================
+   STREETCOFFE — LOCATIONS
+========================================= */
+
+.locations {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  padding: 65px 0 100px;
+  overflow: hidden;
+  background: #fff;
+  color: #111;
+}
+
+.locations__container {
+  position: relative;
+  width: min(94%, 1600px);
+  margin: 0 auto;
+}
+
+/* =========================================
+   HEADER
+========================================= */
+
+.locations__header {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  min-height: 190px;
+  padding: 0 2.5%;
+}
+
+.locations__heading {
+  position: relative;
+  z-index: 2;
+  max-width: 760px;
+}
+
+.locations__eyebrow {
+  margin: 0 0 14px;
+  color: #858585;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  line-height: 1.3;
+  text-transform: uppercase;
+}
+
+.locations__title {
+  margin: 0;
+  color: #080808;
+  font-size: clamp(48px, 4.5vw, 72px);
+  font-weight: 850;
+  letter-spacing: -0.06em;
+  line-height: 0.98;
+}
+
+.locations__title span {
+  color: #d99a61;
+}
+
+.locations__description {
+  max-width: 650px;
+  margin: 15px 0 0;
+  color: #292929;
+  font-size: clamp(16px, 1.25vw, 19px);
+  line-height: 1.45;
+}
+
+/* Рукописная надпись */
+
+.locations__handwriting {
+  position: absolute;
+  z-index: 1;
+  top: 12px;
+  right: 27%;
+
+  margin: 0;
+  color: #171717;
+
+  font-family: "Caveat", "Segoe Print", cursive;
+  font-size: clamp(30px, 3vw, 43px);
+  font-weight: 400;
+  line-height: 0.9;
+
+  transform: rotate(-12deg);
+  pointer-events: none;
+}
+
+.locations__handwriting span {
+  display: inline-block;
+  margin-left: 5px;
+  font-family: "Caveat", cursive;
+  font-size: 1.15em;
+}
+
+/* =========================================
+   MAIN LAYOUT
+========================================= */
+
+.locations__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.79fr) minmax(0, 1.21fr);
+  align-items: stretch;
+  gap: 22px;
+}
+
+/* =========================================
+   SIDEBAR
+========================================= */
+
+.locations__sidebar {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* =========================================
+   SEARCH & SORT
+========================================= */
+
+.locations__controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 190px;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.locations__search,
+.locations__sort {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  height: 54px;
+  padding: 0 17px;
+
+  border: 1px solid #e8e2dc;
+  border-radius: 30px;
+  background: #fff;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.locations__search:focus-within,
+.locations__sort:focus-within {
+  border-color: #d99a61;
+  box-shadow: 0 0 0 3px rgba(217, 154, 97, 0.1);
+}
+
+.locations__search > img,
+.locations__sort > img:first-child {
+  flex: 0 0 auto;
+  width: 21px;
+  height: 21px;
+  object-fit: contain;
+}
+
+.locations__search-input {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  margin-left: 13px;
+
+  border: 0;
+  outline: 0;
+  background: transparent;
+
+  color: #171717;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.locations__search-input::placeholder {
+  color: #777;
+  opacity: 1;
+}
+
+.locations__search-input::-webkit-search-cancel-button {
+  display: none;
+}
+
+.locations__search-clear {
+  display: none;
+  flex: 0 0 auto;
+
+  width: 25px;
+  height: 25px;
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+  background: #f3eee9;
+
+  color: #555;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.locations__search-clear.is-visible {
+  display: grid;
+  place-items: center;
+}
+
+.locations__sort {
+  gap: 11px;
+}
+
+.locations__sort-select {
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+
+  appearance: none;
+  border: 0;
+  outline: 0;
+  background: transparent;
+
+  color: #171717;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.locations__sort-arrow {
+  flex: 0 0 auto;
+  width: 17px;
+  height: 17px;
+  object-fit: contain;
+}
+
+/* =========================================
+   LOCATION LIST
+========================================= */
+
+.locations__list {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+
+  max-height: 635px;
+  padding: 0 8px 0 0;
+
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #c9c1ba transparent;
+}
+
+.locations__list::-webkit-scrollbar {
+  width: 5px;
+}
+
+.locations__list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.locations__list::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background: #c9c1ba;
+}
+
+/* =========================================
+   LOCATION CARD
+========================================= */
+
+.location-card {
+  display: grid;
+  grid-template-columns: minmax(145px, 36%) minmax(0, 1fr);
+  gap: 17px;
+
+  min-height: 190px;
+  padding: 11px;
+
+  border: 1px solid #eee9e4;
+  border-radius: 18px;
+  background: #fff;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.location-card[hidden] {
+  display: none;
+}
+
+.location-card:hover {
+  border-color: rgba(217, 154, 97, 0.55);
+  box-shadow: 0 8px 24px rgba(35, 25, 15, 0.06);
+  transform: translateY(-2px);
+}
+
+/* Фото */
+
+.location-card__photo {
+  position: relative;
+  min-width: 0;
+  min-height: 168px;
+  overflow: hidden;
+
+  border-radius: 12px;
+  background:
+    linear-gradient(145deg, #29201a, #6a4931 55%, #171310);
+}
+
+.location-card__photo img {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+
+  transition: transform 0.45s ease;
+}
+
+.location-card:hover .location-card__photo img:not(.image-error) {
+  transform: scale(1.04);
+}
+
+/* Если фотографии пока нет */
+
+.location-card__photo img.image-error {
+  display: none;
+}
+
+.location-card__photo-fallback {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  color: #f5e7d8;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+
+.location-card__photo-fallback strong {
+  margin-top: 3px;
+  color: #d99a61;
+  font-size: 21px;
+}
+
+/* Скрываем заглушку, если фотография загрузилась */
+
+.location-card__photo:has(img:not(.image-error):not([src=""])) .location-card__photo-fallback {
+  opacity: 0;
+}
+
+/* Контент карточки */
+
+.location-card__content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+  padding: 5px 2px 1px 0;
+}
+
+.location-card__title {
+  margin: 0 0 12px;
+
+  color: #111;
+  font-size: clamp(17px, 1.35vw, 21px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+
+/* Адрес */
+
+.location-card__address {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+
+  margin-bottom: 14px;
+
+  color: #333;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.location-card__address img {
+  flex: 0 0 auto;
+  width: 17px;
+  height: 17px;
+  margin-top: 1px;
+  object-fit: contain;
+}
+
+/* Кнопка маршрута */
+
+.location-card__route {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+
+  min-height: 43px;
+  margin-top: auto;
+  padding: 0 22px;
+
+  border: 1px solid #111;
+  border-radius: 30px;
+  background: #111;
+
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.location-card__route:hover {
+  background: #d99a61;
+  border-color: #d99a61;
+  color: #111;
+}
+
+.location-card__route img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  transition: transform 0.2s ease;
+}
+
+.location-card__route:hover img {
+  filter: none;
+  transform: translate(2px, -2px);
+}
+
+/* Счётчик */
+
+.locations__count {
+  margin-top: 12px;
+  color: #888;
+  font-size: 13px;
+}
+
+.locations__count span {
+  color: #d18c50;
+  font-weight: 700;
+}
+
+/* Ничего не найдено */
+
+.locations__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 180px;
+  padding: 25px;
+
+  border: 1px dashed #e5d8cc;
+  border-radius: 16px;
+
+  color: #777;
+  text-align: center;
+}
+
+.locations__empty[hidden] {
+  display: none;
+}
+
+.locations__empty span {
+  margin-bottom: 8px;
+  font-size: 30px;
+}
+
+.locations__empty p {
+  margin: 0;
+  font-size: 14px;
+}
+
+/* =========================================
+   MAP PLACEHOLDER
+========================================= */
+
+.locations__map {
+  position: relative;
+  isolation: isolate;
+
+  min-width: 0;
+  min-height: 635px;
+
+  overflow: hidden;
+  border-radius: 20px;
+
+  background: #e9e8d8;
+  box-shadow: 0 8px 28px rgba(35, 25, 15, 0.06);
+}
+
+/* Фон карты */
+
+.locations__map-art {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+
+  background-color: #e9e8d8;
+
+  background-image:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px);
+
+  background-size: 42px 42px;
+}
+
+/* Кварталы */
+
+.map-art__blocks {
+  position: absolute;
+  inset: -10%;
+
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 35px,
+      rgba(255, 255, 255, 0.48) 36px 40px,
+      transparent 41px 76px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 47px,
+      rgba(255, 255, 255, 0.48) 48px 52px,
+      transparent 53px 94px
+    );
+
+  transform: rotate(-8deg) scale(1.15);
+}
+
+/* Зелёные зоны */
+
+.map-art__parks {
+  position: absolute;
+  inset: 0;
+
+  background:
+    radial-gradient(ellipse at 15% 20%, rgba(164, 190, 139, 0.65) 0 10%, transparent 10.5%),
+    radial-gradient(ellipse at 75% 18%, rgba(164, 190, 139, 0.65) 0 12%, transparent 12.5%),
+    radial-gradient(ellipse at 28% 72%, rgba(164, 190, 139, 0.55) 0 10%, transparent 10.5%),
+    radial-gradient(ellipse at 85% 70%, rgba(164, 190, 139, 0.55) 0 9%, transparent 9.5%);
+}
+
+/* Волга */
+
+.map-art__water {
+  position: absolute;
+  z-index: 1;
+
+  right: -10%;
+  bottom: -20%;
+
+  width: 125%;
+  height: 31%;
+
+  border-radius: 50% 0 0 0;
+
+  background:
+    linear-gradient(170deg, rgba(255, 255, 255, 0.25), transparent 30%),
+    #9bc9d9;
+
+  transform: rotate(-4deg);
+}
+
+.map-art__river-label {
+  position: absolute;
+  z-index: 2;
+  right: 42%;
+  bottom: 7%;
+
+  color: #347c9a;
+  font-size: 13px;
+  font-style: italic;
+}
+
+/* Дороги */
+
+.map-art__road {
+  position: absolute;
+  z-index: 2;
+
+  height: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 50px;
+
+  background: #f5c77d;
+  box-shadow: 0 0 0 1px rgba(225, 174, 98, 0.18);
+
+  transform-origin: center;
+}
+
+.map-art__road--one {
+  top: 25%;
+  left: -10%;
+  width: 125%;
+  transform: rotate(13deg);
+}
+
+.map-art__road--two {
+  top: 49%;
+  left: -10%;
+  width: 125%;
+  transform: rotate(-9deg);
+}
+
+.map-art__road--three {
+  top: 72%;
+  left: -10%;
+  width: 120%;
+  transform: rotate(5deg);
+}
+
+.map-art__road--four {
+  top: -10%;
+  left: 35%;
+  width: 120%;
+  transform: rotate(77deg);
+}
+
+.map-art__road--five {
+  top: -10%;
+  left: 72%;
+  width: 120%;
+  transform: rotate(83deg);
+}
+
+/* Подписи районов */
+
+.map-art__district {
+  position: absolute;
+  z-index: 3;
+
+  color: #6d716e;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  line-height: 1.35;
+  text-align: center;
+}
+
+.map-art__district--one {
+  top: 31%;
+  left: 8%;
+}
+
+.map-art__district--two {
+  top: 59%;
+  left: 37%;
+}
+
+.map-art__district--three {
+  top: 60%;
+  right: 7%;
+}
+
+.map-art__city {
+  position: absolute;
+  z-index: 3;
+
+  top: 75%;
+  left: 39%;
+
+  color: #292929;
+  font-size: 23px;
+  font-weight: 800;
+}
+
+/* =========================================
+   MAP MARKERS
+========================================= */
+
+.locations__markers {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  pointer-events: none;
+}
+
+.map-marker {
+  position: absolute;
+
+  top: var(--marker-y);
+  left: var(--marker-x);
+
+  display: grid;
+  place-items: center;
+
+  width: 52px;
+  height: 62px;
+  padding: 0;
+
+  border: 0;
+  background: transparent;
+
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+}
+
+.map-marker img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+
+  filter: drop-shadow(0 5px 5px rgba(30, 20, 10, 0.2));
+  transition: transform 0.2s ease;
+}
+
+.map-marker--active::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+
+  width: 76px;
+  height: 76px;
+
+  border-radius: 50%;
+  background: rgba(217, 154, 97, 0.24);
+}
+
+.map-marker:hover img {
+  transform: translateY(-5px);
+}
+
+/* =========================================
+   MAP POPUP
+========================================= */
+
+.locations__map-popup {
+  position: absolute;
+  z-index: 5;
+
+  top: 20%;
+  left: 35%;
+
+  display: grid;
+  grid-template-columns: 100px minmax(0, 1fr);
+  gap: 13px;
+
+  width: min(340px, 65%);
+  padding: 12px;
+
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 19px;
+  background: rgba(255, 255, 255, 0.96);
+
+  box-shadow: 0 10px 35px rgba(35, 25, 15, 0.15);
+}
+
+.locations__map-popup::after {
+  content: "";
+  position: absolute;
+
+  bottom: -10px;
+  left: 38%;
+
+  width: 20px;
+  height: 20px;
+
+  background: #fff;
+  transform: rotate(45deg);
+}
+
+.map-popup__photo {
+  position: relative;
+  min-height: 105px;
+  overflow: hidden;
+  border-radius: 11px;
+  background: #302219;
+}
+
+.map-popup__photo img {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  inset: 0;
+  object-fit: cover;
+}
+
+.map-popup__photo img.image-error {
+  display: none;
+}
+
+.map-popup__content {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.map-popup__content strong {
+  margin: 2px 0 6px;
+  color: #111;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.map-popup__content > span {
+  color: #333;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.map-popup__content a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  min-height: 34px;
+  margin-top: auto;
+  padding: 0 12px;
+
+  border-radius: 20px;
+  background: #111;
+
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.map-popup__content a img {
+  width: 13px;
+  height: 13px;
+  filter: brightness(0) invert(1);
+}
+
+/* =========================================
+   MAP CONTROLS
+========================================= */
+
+.locations__map-zoom {
+  position: absolute;
+  z-index: 5;
+
+  top: 20px;
+  right: 18px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 43px;
+  overflow: hidden;
+
+  border-radius: 22px;
+  background: #fff;
+
+  box-shadow: 0 4px 15px rgba(30, 20, 10, 0.12);
+}
+
+.locations__map-zoom button {
+  display: grid;
+  place-items: center;
+
+  width: 43px;
+  height: 42px;
+
+  border: 0;
+  background: transparent;
+
+  color: #111;
+  font-family: inherit;
+  font-size: 25px;
+  cursor: default;
+}
+
+.locations__map-zoom span {
+  width: 24px;
+  height: 1px;
+  background: #eee;
+}
+
+/* Кнопка открытия карты */
+
+.locations__map-link {
+  position: absolute;
+  z-index: 5;
+
+  right: 18px;
+  bottom: 18px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+
+  min-height: 43px;
+  padding: 0 17px;
+
+  border-radius: 25px;
+  background: #fff;
+
+  color: #111;
+  font-size: 12px;
+  font-weight: 600;
+  text-decoration: none;
+
+  box-shadow: 0 5px 20px rgba(30, 20, 10, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.locations__map-link:hover {
+  transform: translateY(-2px);
+}
+
+.locations__map-link > img {
+  width: 15px;
+  height: 15px;
+}
+
+.locations__map-link-pin {
+  position: relative;
+  width: 14px;
+  height: 14px;
+  border-radius: 50% 50% 50% 0;
+  background: #e53935;
+  transform: rotate(-45deg);
+}
+
+.locations__map-link-pin::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+  background: #fff;
+}
+
+/* Подсказка */
+
+.locations__map-note {
+  position: absolute;
+  z-index: 4;
+
+  left: 50%;
+  bottom: 18px;
+
+  padding: 8px 13px;
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.8);
+  color: #777;
+
+  font-size: 11px;
+  white-space: nowrap;
+
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+/* =========================================
+   LAPTOP
+========================================= */
+
+@media (max-width: 1250px) {
+  .locations {
+    padding: 55px 0 80px;
+  }
+
+  .locations__container {
+    width: 94%;
+  }
+
+  .locations__header {
+    min-height: 175px;
+  }
+
+  .locations__layout {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: 16px;
+  }
+
+  .locations__controls {
+    grid-template-columns: minmax(0, 1fr) 165px;
+    gap: 8px;
+  }
+
+  .locations__search,
+  .locations__sort {
+    height: 50px;
+    padding: 0 13px;
+  }
+
+  .location-card {
+    grid-template-columns: minmax(120px, 34%) minmax(0, 1fr);
+    gap: 12px;
+    min-height: 170px;
+    padding: 9px;
+  }
+
+  .location-card__photo {
+    min-height: 150px;
+  }
+
+  .location-card__title {
+    margin-bottom: 9px;
+    font-size: 17px;
+  }
+
+  .location-card__address {
+    margin-bottom: 10px;
+    font-size: 13px;
+  }
+
+  .location-card__route {
+    min-height: 39px;
+    padding: 0 15px;
+    font-size: 12px;
+  }
+
+  .locations__list,
+  .locations__map {
+    max-height: 590px;
+    min-height: 590px;
+  }
+
+  .locations__map-popup {
+    left: 27%;
+    width: 72%;
+  }
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 900px) {
+  .locations {
+    padding: 45px 0 65px;
+  }
+
+  .locations__container {
+    width: calc(100% - 48px);
+  }
+
+  .locations__header {
+    min-height: 0;
+    padding: 0;
+    margin-bottom: 28px;
+  }
+
+  .locations__heading {
+    max-width: 650px;
+  }
+
+  .locations__title {
+    font-size: clamp(44px, 7vw, 64px);
+  }
+
+  .locations__description {
+    font-size: 16px;
+  }
+
+  .locations__handwriting {
+    top: 0;
+    right: 3%;
+    font-size: 30px;
+  }
+
+  .locations__layout {
+    grid-template-columns: 1fr;
+    gap: 25px;
+  }
+
+  .locations__controls {
+    grid-template-columns: minmax(0, 1fr) 190px;
+  }
+
+  .locations__list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-height: 590px;
+    overflow-y: auto;
+  }
+
+  .location-card {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .location-card__photo {
+    min-height: 170px;
+  }
+
+  .location-card__content {
+    padding: 4px 4px 3px;
+  }
+
+  .location-card__route {
+    margin-top: 12px;
+  }
+
+  .locations__map {
+    min-height: 520px;
+    max-height: none;
+  }
+
+  .locations__map-popup {
+    left: 35%;
+    width: min(340px, 60%);
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+  .locations {
+    padding: 38px 0 55px;
+  }
+
+  .locations__container {
+    width: calc(100% - 32px);
+  }
+
+  .locations__header {
+    margin-bottom: 22px;
+  }
+
+  .locations__eyebrow {
+    margin-bottom: 11px;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+  }
+
+  .locations__title {
+    font-size: clamp(39px, 10vw, 54px);
+    line-height: 1;
+  }
+
+  .locations__description {
+    max-width: 100%;
+    margin-top: 13px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+
+  .locations__handwriting {
+    display: none;
+  }
+
+  /* Поиск */
+
+  .locations__controls {
+    grid-template-columns: 1fr;
+    gap: 9px;
+    margin-bottom: 13px;
+  }
+
+  .locations__search,
+  .locations__sort {
+    height: 50px;
+    padding: 0 15px;
+  }
+
+  .locations__search-input,
+  .locations__sort-select {
+    font-size: 14px;
+  }
+
+  /* Карточки */
+
+  .locations__list {
+    display: flex;
+    max-height: 560px;
+    gap: 10px;
+    padding-right: 5px;
+  }
+
+  .location-card {
+    grid-template-columns: 112px minmax(0, 1fr);
+    gap: 12px;
+
+    min-height: 145px;
+    padding: 8px;
+
+    border-radius: 15px;
+  }
+
+  .location-card__photo {
+    min-height: 127px;
+    border-radius: 10px;
+  }
+
+  .location-card__photo-fallback {
+    font-size: 12px;
+  }
+
+  .location-card__photo-fallback strong {
+    font-size: 15px;
+  }
+
+  .location-card__content {
+    padding: 3px 0;
+  }
+
+  .location-card__title {
+    margin-bottom: 8px;
+    font-size: 16px;
+  }
+
+  .location-card__address {
+    gap: 7px;
+    margin-bottom: 9px;
+    font-size: 13px;
+  }
+
+  .location-card__address img {
+    width: 15px;
+    height: 15px;
+  }
+
+  .location-card__route {
+    min-height: 34px;
+    gap: 7px;
+    padding: 0 12px;
+    font-size: 11px;
+  }
+
+  .location-card__route img {
+    width: 13px;
+    height: 13px;
+  }
+
+  .locations__count {
+    font-size: 12px;
+  }
+
+  /* Карта */
+
+  .locations__map {
+    min-height: 390px;
+    border-radius: 16px;
+  }
+
+  .map-art__district {
+    font-size: 9px;
+  }
+
+  .map-art__city {
+    font-size: 17px;
+  }
+
+  .map-marker {
+    width: 39px;
+    height: 48px;
+  }
+
+  .map-marker--active::before {
+    width: 58px;
+    height: 58px;
+  }
+
+  /* Popup */
+
+  .locations__map-popup {
+    top: 18%;
+    left: 10%;
+
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 9px;
+
+    width: 80%;
+    padding: 9px;
+    border-radius: 14px;
+  }
+
+  .map-popup__photo {
+    min-height: 83px;
+  }
+
+  .map-popup__content strong {
+    font-size: 13px;
+  }
+
+  .map-popup__content > span {
+    font-size: 11px;
+  }
+
+  .map-popup__content a {
+    min-height: 29px;
+    padding: 0 9px;
+    font-size: 9px;
+  }
+
+  .locations__map-zoom {
+    top: 12px;
+    right: 12px;
+    width: 37px;
+  }
+
+  .locations__map-zoom button {
+    width: 37px;
+    height: 36px;
+    font-size: 22px;
+  }
+
+  .locations__map-link {
+    right: 10px;
+    bottom: 10px;
+
+    min-height: 37px;
+    gap: 7px;
+    padding: 0 12px;
+
+    font-size: 10px;
+  }
+
+  .locations__map-link > img {
+    width: 13px;
+    height: 13px;
+  }
+
+  .locations__map-note {
+    display: none;
+  }
+}
+
+/* =========================================
+   EXTRA SMALL MOBILE
+========================================= */
+
+@media (max-width: 380px) {
+  .locations__container {
+    width: calc(100% - 26px);
+  }
+
+  .locations__title {
+    font-size: 38px;
+  }
+
+  .location-card {
+    grid-template-columns: 95px minmax(0, 1fr);
+    gap: 9px;
+  }
+
+  .location-card__photo {
+    min-height: 120px;
+  }
+
+  .location-card__title {
+    font-size: 15px;
+  }
+
+  .location-card__address {
+    font-size: 12px;
+  }
+
+  .location-card__route {
+    padding: 0 9px;
+    font-size: 10px;
+  }
+
+  .locations__map {
+    min-height: 340px;
+  }
+}
+
+/* =========================================
+   ACCESSIBILITY
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .locations *,
+  .locations *::before,
+  .locations *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

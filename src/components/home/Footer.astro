@@ -1,0 +1,236 @@
+---
+import "./Footer.css";
+
+/*
+  Контактные данные.
+  Заполни после того, как будут готовы реальные контакты.
+*/
+const contacts = {
+  phone: "",
+  phoneDisplay: "",
+  email: "",
+};
+
+/*
+  Социальные сети.
+  Замени пустые ссылки на реальные адреса страниц StreetCoffe.
+*/
+const socials = [
+  {
+    name: "VK",
+    icon: "/icons/vk.svg",
+    href: "",
+  },
+  {
+    name: "Telegram",
+    icon: "/icons/telegram.svg",
+    href: "",
+  },
+  {
+    name: "Instagram",
+    icon: "/icons/instagram.svg",
+    href: "",
+  },
+  {
+    name: "YouTube",
+    icon: "/icons/youtube.svg",
+    href: "",
+  },
+];
+
+const navigation = [
+  { label: "Главная", href: "/" },
+  { label: "Меню", href: "/menu/" },
+  { label: "Наши кофейни", href: "/#locations" },
+  { label: "Статьи", href: "/articles/" },
+  { label: "О нас", href: "/#about" },
+  { label: "Контакты", href: "/#contacts" },
+];
+
+const locations = [
+  "ул. Спортивная, 31А",
+  "ул. Юбилейная, 91А",
+  "ул. Юбилейная, 55/2",
+  "ул. Спортивная, 3А",
+  "ул. Революционная, 54А",
+  "Приморский бульвар, 37с1",
+  "ул. Строителей, 2А",
+  "ул. Строителей, 15",
+];
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="footer" id="contacts">
+  <div class="footer__main">
+
+    <!-- Декоративные элементы -->
+    <div class="footer__decor" aria-hidden="true">
+      <img
+        class="footer__stamp"
+        src="/images/home/footer-stamp.webp"
+        alt=""
+        loading="lazy"
+      />
+
+      <img
+        class="footer__cup"
+        src="/images/home/footer-cup.webp"
+        alt=""
+        loading="lazy"
+      />
+    </div>
+
+    <div class="footer__container">
+
+      <!-- BRAND -->
+      <div class="footer__brand">
+
+        <a href="/" class="footer__brand-logo" aria-label="StreetCoffe — главная">
+          <img
+            src="/logo/logo-white.svg"
+            alt="StreetCoffe"
+            loading="lazy"
+          />
+        </a>
+
+        <p class="footer__handwriting">
+          Больше<br />
+          чем кофе <span>♡</span>
+        </p>
+
+        <p class="footer__brand-description">
+          Любимые напитки, яркие вкусы<br class="desktop-only" />
+          и уютная атмосфера рядом.<br />
+          StreetCoffe — всегда с тобой.
+        </p>
+
+        <div class="footer__socials" aria-label="Социальные сети">
+          {socials.map((social) => (
+            <a
+              class="footer__social"
+              href={social.href || "#"}
+              aria-label={social.name}
+              target={social.href ? "_blank" : undefined}
+              rel={social.href ? "noopener noreferrer" : undefined}
+              aria-disabled={!social.href ? "true" : undefined}
+            >
+              <img src={social.icon} alt="" loading="lazy" />
+            </a>
+          ))}
+        </div>
+      </div>
+
+      <!-- NAVIGATION -->
+      <nav class="footer__column footer__navigation" aria-label="Навигация">
+        <h2 class="footer__column-title">Навигация</h2>
+
+        <ul class="footer__nav-list">
+          {navigation.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+
+      <!-- LOCATIONS -->
+      <div class="footer__column footer__locations">
+        <div class="footer__locations-heading">
+          <h2 class="footer__column-title">Наши кофейни</h2>
+
+          <a href="/#locations" class="footer__all-locations">
+            <img src="/icons/location.svg" alt="" />
+            <span>Все кофейни</span>
+            <span class="footer__arrow" aria-hidden="true">›</span>
+          </a>
+        </div>
+
+        <ul class="footer__location-list">
+          {locations.map((address) => (
+            <li class="footer__location">
+              <img
+                class="footer__location-icon"
+                src="/icons/location.svg"
+                alt=""
+                loading="lazy"
+              />
+
+              <span>{address}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- CONTACTS -->
+      <div class="footer__column footer__contacts">
+        <h2 class="footer__column-title">Контакты</h2>
+
+        {contacts.phone && (
+          <a class="footer__contact" href={`tel:${contacts.phone}`}>
+            <img src="/icons/phone.svg" alt="" />
+            <span>
+              <strong>{contacts.phoneDisplay || contacts.phone}</strong>
+              <small>Единый номер</small>
+            </span>
+          </a>
+        )}
+
+        {contacts.email && (
+          <a class="footer__contact" href={`mailto:${contacts.email}`}>
+            <img src="/icons/mail.svg" alt="" />
+            <span>
+              <strong>{contacts.email}</strong>
+              <small>Для вопросов и предложений</small>
+            </span>
+          </a>
+        )}
+
+        {!contacts.phone && !contacts.email && (
+          <p class="footer__contacts-placeholder">
+            По вопросам и предложениям
+            свяжитесь с нами в социальных сетях.
+          </p>
+        )}
+
+        <a href="/#contacts" class="footer__contact-button">
+          <img src="/icons/navigation.svg" alt="" />
+          <span>Написать нам</span>
+          <span class="footer__button-arrow" aria-hidden="true">›</span>
+        </a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- BOTTOM BAR -->
+  <div class="footer__bottom">
+    <div class="footer__bottom-container">
+
+      <p class="footer__copyright">
+        © {currentYear} StreetCoffe. Все права защищены.
+      </p>
+
+      <div class="footer__legal">
+        <a href="/privacy/">Политика конфиденциальности</a>
+        <span class="footer__legal-divider"></span>
+        <a href="/agreement/">Пользовательское соглашение</a>
+      </div>
+
+      <p class="footer__made">
+        <span class="footer__made-icon">♧</span>
+        Сделано с <span class="footer__heart">♡</span> в Тольятти
+      </p>
+
+      <button
+        class="footer__to-top"
+        type="button"
+        aria-label="Вернуться наверх"
+        onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+      >
+        <span aria-hidden="true">⌃</span>
+      </button>
+
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,323 @@
+---
+import "./Locations.css";
+
+const locations = [
+  { id: 1, address: "Спортивная, 31А", image: "/images/locations/location-01.webp" },
+  { id: 2, address: "Юбилейная, 91А", image: "/images/locations/location-02.webp" },
+  { id: 3, address: "Юбилейная, 55/2", image: "/images/locations/location-03.webp" },
+  { id: 4, address: "Спортивная, 3А", image: "/images/locations/location-04.webp" },
+  { id: 5, address: "Революционная, 54А", image: "/images/locations/location-05.webp" },
+  { id: 6, address: "Приморский бульвар, 37с1", image: "/images/locations/location-06.webp" },
+  { id: 7, address: "Строителей, 2А", image: "/images/locations/location-07.webp" },
+  { id: 8, address: "Строителей, 15", image: "/images/locations/location-08.webp" },
+];
+---
+
+<section class="locations" id="locations">
+  <div class="locations__container">
+
+    <!-- Заголовок -->
+    <header class="locations__header">
+      <div class="locations__heading">
+        <p class="locations__eyebrow">Наши кофейни</p>
+
+        <h2 class="locations__title">
+          Всегда <span>рядом</span>
+        </h2>
+
+        <p class="locations__description">
+          StreetCoffe — это уютные кофейни в разных районах Тольятти.
+          Выбирай ближайшую и заходи за любимым напитком.
+        </p>
+      </div>
+
+      <p class="locations__handwriting" aria-hidden="true">
+        Тольятти<br />
+        вкуснее<br />
+        с кофе <span>♡</span>
+      </p>
+    </header>
+
+    <!-- Основная область -->
+    <div class="locations__layout">
+
+      <!-- Левая колонка -->
+      <div class="locations__sidebar">
+
+        <!-- Поиск и сортировка -->
+        <div class="locations__controls">
+          <label class="locations__search">
+            <img src="/icons/search.svg" alt="" />
+
+            <input
+              class="locations__search-input"
+              type="search"
+              placeholder="Найти кофейню по адресу..."
+              aria-label="Поиск кофейни по адресу"
+            />
+
+            <button
+              class="locations__search-clear"
+              type="button"
+              aria-label="Очистить поиск"
+            >
+              ×
+            </button>
+          </label>
+
+          <label class="locations__sort">
+            <img src="/icons/map-pin.svg" alt="" />
+
+            <select class="locations__sort-select" aria-label="Сортировка кофеен">
+              <option value="default">Все кофейни</option>
+              <option value="asc">По адресу А—Я</option>
+              <option value="desc">По адресу Я—А</option>
+            </select>
+
+            <img
+              class="locations__sort-arrow"
+              src="/icons/chevron-down.svg"
+              alt=""
+            />
+          </label>
+        </div>
+
+        <!-- Список кофеен -->
+        <div class="locations__list" aria-live="polite">
+          {locations.map((location) => (
+            <article
+              class="location-card"
+              data-location-card
+              data-address={location.address.toLowerCase()}
+              data-id={location.id}
+            >
+              <div class="location-card__photo">
+                <img
+                  src={location.image}
+                  alt={`Интерьер кофейни StreetCoffe №${location.id}`}
+                  loading="lazy"
+                />
+
+                <span class="location-card__photo-fallback">
+                  <span>STREET</span>
+                  <strong>COFFEE</strong>
+                </span>
+              </div>
+
+              <div class="location-card__content">
+                <h3 class="location-card__title">
+                  Кофейня №{location.id}
+                </h3>
+
+                <div class="location-card__address">
+                  <img src="/icons/location.svg" alt="" />
+                  <span>{location.address}</span>
+                </div>
+
+                <a
+                  class="location-card__route"
+                  href={`https://yandex.ru/maps/?text=${encodeURIComponent(`Тольятти, ${location.address}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Найти маршрут до кофейни №${location.id}`}
+                >
+                  Построить маршрут
+                  <img src="/icons/arrow-up-right.svg" alt="" />
+                </a>
+              </div>
+            </article>
+          ))}
+
+          <div class="locations__empty" hidden>
+            <span>☕</span>
+            <p>Кофейня по такому адресу не найдена</p>
+          </div>
+        </div>
+
+        <div class="locations__count">
+          Показано <span data-visible-count>8</span> из 8 кофеен
+        </div>
+      </div>
+
+      <!-- Правая колонка — будущая карта -->
+      <div class="locations__map" aria-label="Область карты кофеен StreetCoffe">
+
+        <div class="locations__map-art" aria-hidden="true">
+          <div class="map-art__blocks"></div>
+          <div class="map-art__parks"></div>
+          <div class="map-art__water"></div>
+
+          <div class="map-art__road map-art__road--one"></div>
+          <div class="map-art__road map-art__road--two"></div>
+          <div class="map-art__road map-art__road--three"></div>
+          <div class="map-art__road map-art__road--four"></div>
+          <div class="map-art__road map-art__road--five"></div>
+
+          <span class="map-art__district map-art__district--one">
+            АВТОЗАВОДСКИЙ<br />РАЙОН
+          </span>
+
+          <span class="map-art__district map-art__district--two">
+            ЦЕНТРАЛЬНЫЙ<br />РАЙОН
+          </span>
+
+          <span class="map-art__district map-art__district--three">
+            КОМСОМОЛЬСКИЙ<br />РАЙОН
+          </span>
+
+          <span class="map-art__city">Тольятти</span>
+          <span class="map-art__river-label">р. Волга</span>
+        </div>
+
+        <!-- Маркеры-заглушки. Координаты будут заменены на реальные при подключении карты -->
+        <div class="locations__markers" aria-hidden="true">
+          {locations.map((location, index) => (
+            <button
+              class:list={[
+                "map-marker",
+                index === 0 && "map-marker--active",
+              ]}
+              type="button"
+              style={`--marker-x: ${[22, 39, 56, 16, 68, 83, 48, 75][index]}%; --marker-y: ${[22, 47, 38, 58, 68, 54, 78, 82][index]}%;`}
+              tabindex="-1"
+            >
+              <img src="/icons/coffee-pin.svg" alt="" />
+            </button>
+          ))}
+        </div>
+
+        <!-- Информационная карточка -->
+        <div class="locations__map-popup">
+          <div class="map-popup__photo">
+            <img
+              src="/images/locations/location-01.webp"
+              alt=""
+              loading="lazy"
+            />
+          </div>
+
+          <div class="map-popup__content">
+            <strong>Кофейня №1</strong>
+            <span>Спортивная, 31А</span>
+
+            <a
+              href="https://yandex.ru/maps/?text=Тольятти%2C%20Спортивная%2C%2031А"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Открыть в Яндекс Картах
+              <img src="/icons/arrow-up-right.svg" alt="" />
+            </a>
+          </div>
+        </div>
+
+        <!-- Управление картой — визуальная заглушка -->
+        <div class="locations__map-zoom" aria-hidden="true">
+          <button type="button" tabindex="-1">+</button>
+          <span></span>
+          <button type="button" tabindex="-1">−</button>
+        </div>
+
+        <a
+          class="locations__map-link"
+          href="https://yandex.ru/maps/?text=StreetCoffe%20Тольятти"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span class="locations__map-link-pin"></span>
+          Открыть в Яндекс Картах
+          <img src="/icons/arrow-up-right.svg" alt="" />
+        </a>
+
+        <div class="locations__map-note">
+          Здесь появится интерактивная карта кофеен
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const initLocations = () => {
+    const section = document.querySelector(".locations");
+
+    if (!section || section.hasAttribute("data-initialized")) return;
+
+    section.setAttribute("data-initialized", "true");
+
+    const searchInput = section.querySelector(".locations__search-input");
+    const clearButton = section.querySelector(".locations__search-clear");
+    const sortSelect = section.querySelector(".locations__sort-select");
+    const list = section.querySelector(".locations__list");
+    const count = section.querySelector("[data-visible-count]");
+    const empty = section.querySelector(".locations__empty");
+
+    if (
+      !(searchInput instanceof HTMLInputElement) ||
+      !(sortSelect instanceof HTMLSelectElement) ||
+      !list ||
+      !count ||
+      !empty
+    ) return;
+
+    const getCards = () =>
+      Array.from(list.querySelectorAll("[data-location-card]"));
+
+    const updateLocations = () => {
+      const query = searchInput.value.trim().toLowerCase();
+      const sort = sortSelect.value;
+      const cards = getCards();
+
+      cards.sort((a, b) => {
+        const addressA = a.getAttribute("data-address") || "";
+        const addressB = b.getAttribute("data-address") || "";
+
+        if (sort === "asc") return addressA.localeCompare(addressB, "ru");
+        if (sort === "desc") return addressB.localeCompare(addressA, "ru");
+
+        return Number(a.getAttribute("data-id")) -
+          Number(b.getAttribute("data-id"));
+      });
+
+      cards.forEach((card) => {
+        const address = card.getAttribute("data-address") || "";
+        const title = card.querySelector(".location-card__title")?.textContent || "";
+        const matches = `${address} ${title.toLowerCase()}`.includes(query);
+
+        card.toggleAttribute("hidden", !matches);
+        list.appendChild(card);
+      });
+
+      const visible = cards.filter((card) => !card.hasAttribute("hidden")).length;
+
+      count.textContent = String(visible);
+      empty.toggleAttribute("hidden", visible !== 0);
+
+      if (clearButton instanceof HTMLButtonElement) {
+        clearButton.classList.toggle("is-visible", query.length > 0);
+      }
+    };
+
+    searchInput.addEventListener("input", updateLocations);
+    sortSelect.addEventListener("change", updateLocations);
+
+    clearButton?.addEventListener("click", () => {
+      searchInput.value = "";
+      updateLocations();
+      searchInput.focus();
+    });
+
+    // Если фотография ещё не добавлена, показываем фирменную заглушку.
+    section.querySelectorAll(".location-card__photo img, .map-popup__photo img")
+      .forEach((image) => {
+        image.addEventListener("error", () => {
+          image.classList.add("image-error");
+        });
+      });
+
+    updateLocations();
+  };
+
+  initLocations();
+  document.addEventListener("astro:page-load", initLocations);
+</script>

@@ -1,13 +1,52 @@
 ---
 import "./Header.css";
 
+// Получаем текущий адрес страницы
+const currentPath = Astro.url.pathname.replace(/\/+$/, "") || "/";
+
+// Адреса всех статей
+const articlePaths = [
+  "/coffee",
+  "/bubble-tea",
+  "/locations",
+  "/streetcoffe-life",
+];
+
+// Проверяем, открыта ли статья
+const isArticlePage = articlePaths.includes(currentPath);
+
+// Пункты навигации
 const navItems = [
-  { label: "Главная", href: "/", active: true },
-  { label: "Меню", href: "#menu" },
-  { label: "О нас", href: "#about" },
-  { label: "Наши кофейни", href: "#locations" },
-  { label: "Блог", href: "#blog" },
-  { label: "FAQ", href: "#faq" },
+  {
+    label: "Главная",
+    href: "/",
+    active: currentPath === "/",
+  },
+  {
+    label: "Меню",
+    href: "#menu",
+    active: false,
+  },
+  {
+    label: "О нас",
+    href: "#about",
+    active: false,
+  },
+  {
+    label: "Наши кофейни",
+    href: "#locations",
+    active: false,
+  },
+  {
+    label: "Блог",
+    href: "/#blog",
+    active: isArticlePage,
+  },
+  {
+    label: "FAQ",
+    href: "#faq",
+    active: false,
+  },
 ];
 ---
 

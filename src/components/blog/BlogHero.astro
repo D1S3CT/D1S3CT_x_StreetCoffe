@@ -1,0 +1,72 @@
+---
+import "./BlogHero.css";
+
+const categories = [
+  {
+    title: "Всё о кофе",
+    description: "Сорта, способы приготовления и интересные факты о кофе",
+    href: "/coffee",
+    icon: "/icons/coffee-cup.svg",
+  },
+  {
+    title: "Мир Bubble Tea",
+    description: "Вкусы, топпинги и почему его все любят",
+    href: "/bubble-tea",
+    icon: "/icons/bubble-tea.svg",
+  },
+  {
+    title: "Наши кофейни",
+    description: "Адреса, атмосфера и особенности каждой точки в Тольятти",
+    href: "/locations",
+    icon: "/icons/location.svg",
+  },
+  {
+    title: "Жизнь StreetCoffe",
+    description: "Новости, сезонные напитки и истории нашей команды",
+    href: "/streetcoffe-life",
+    icon: "/icons/heart.svg",
+  },
+];
+---
+---
+
+<section class="blog-hero">
+  <div class="blog-hero__decor blog-hero__decor--stamp" aria-hidden="true"></div>
+  <div class="blog-hero__decor blog-hero__decor--beans" aria-hidden="true"></div>
+  <div class="blog-hero__decor blog-hero__decor--leaf" aria-hidden="true"></div>
+
+  <div class="blog-hero__inner">
+    <div class="blog-hero__intro">
+      <p class="blog-hero__eyebrow">Полезные статьи</p>
+      <h1 class="blog-hero__title">
+        StreetCoffe —<br />
+        <span>сеть кофеен</span><br />
+        в Тольятти
+      </h1>
+      <p class="blog-hero__description">
+        Рассказываем о кофе, Bubble Tea, наших кофейнях<br class="desktop-break" />
+        и вдохновляющих историях — всё, что делает<br class="desktop-break" />
+        StreetCoffe ближе к тебе.
+      </p>
+    </div>
+
+    <p class="blog-hero__handwriting" aria-hidden="true">
+      Больше<br />чем кофе <span>♡</span>
+    </p>
+
+    <div class="blog-hero__cards" aria-label="Разделы блога">
+      {categories.map((category) => (
+        <a class="blog-category" href={category.href}>
+          <div class="blog-category__top">
+            <span class="blog-category__icon">
+              <img src={category.icon} alt="" loading="lazy" />
+            </span>
+            <span class="blog-category__arrow" aria-hidden="true">›</span>
+          </div>
+          <h2 class="blog-category__title">{category.title}</h2>
+          <p class="blog-category__description">{category.description}</p>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
