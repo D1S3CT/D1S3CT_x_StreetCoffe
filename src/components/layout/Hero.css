@@ -696,3 +696,10 @@
   }
 }
 
+/* Исправление внутренних отступов первой Hero-кнопки */
+@media (min-width: 701px) and (max-width: 770px) {
+  .hero__actions .hero-button--light {
+    padding-left: 24px;
+  }
+}
+
