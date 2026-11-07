@@ -1,0 +1,289 @@
+/* =========================================
+   STREETCOFFE — PROMOTIONS
+========================================= */
+
+.promotions {
+  position: relative;
+  width: 100%;
+  padding: 50px 0 35px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.promotions__container {
+  width: calc(100% - 140px);
+  max-width: 1780px;
+  margin: 0 auto;
+}
+
+/* Slider */
+
+.promotions__slider {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1920 / 560;
+  overflow: hidden;
+  border-radius: 28px;
+  background: #f5eee8;
+  isolation: isolate;
+}
+
+.promotions__track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* Slides */
+
+.promotions__slide {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+
+  transition:
+    opacity 0.55s ease,
+    visibility 0.55s ease;
+}
+
+.promotions__slide.is-active {
+  z-index: 1;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.promotions__slide picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.promotions__slide img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* =========================================
+   ARROWS
+========================================= */
+
+.promotions__arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+
+  width: 48px;
+  height: 48px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 50%;
+
+  color: #fff;
+  background: rgba(10, 10, 10, 0.55);
+
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  transform: translateY(-50%);
+
+  transition:
+    background-color 0.25s ease,
+    border-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.promotions__arrow:hover {
+  background: #d99a61;
+  border-color: #d99a61;
+}
+
+.promotions__arrow svg {
+  width: 21px;
+  height: 21px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.promotions__arrow--prev {
+  left: 22px;
+}
+
+.promotions__arrow--next {
+  right: 22px;
+}
+
+/* =========================================
+   DOTS
+========================================= */
+
+.promotions__dots {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: 22px;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  transform: translateX(-50%);
+}
+
+.promotions__dot {
+  width: 8px;
+  height: 8px;
+
+  padding: 0;
+  border: 0;
+  border-radius: 20px;
+
+  background: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+
+  transition:
+    width 0.3s ease,
+    background-color 0.3s ease;
+}
+
+.promotions__dot.is-active {
+  width: 28px;
+  background: #d99a61;
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 1100px) {
+  .promotions {
+    padding: 40px 0 30px;
+  }
+
+  .promotions__container {
+    width: calc(100% - 80px);
+  }
+
+  .promotions__slider {
+    border-radius: 24px;
+  }
+
+  .promotions__arrow {
+    width: 42px;
+    height: 42px;
+  }
+
+  .promotions__arrow--prev {
+    left: 16px;
+  }
+
+  .promotions__arrow--next {
+    right: 16px;
+  }
+
+  .promotions__dots {
+    bottom: 16px;
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 700px) {
+  .promotions {
+    padding: 30px 0 25px;
+  }
+
+  .promotions__container {
+    width: calc(100% - 32px);
+  }
+
+  .promotions__slider {
+    aspect-ratio: 3 / 4;
+    border-radius: 22px;
+  }
+
+  .promotions__slide img {
+    object-position: center;
+  }
+
+  .promotions__arrow {
+    width: 38px;
+    height: 38px;
+  }
+
+  .promotions__arrow--prev {
+    left: 12px;
+  }
+
+  .promotions__arrow--next {
+    right: 12px;
+  }
+
+  .promotions__dots {
+    bottom: 14px;
+    gap: 7px;
+  }
+
+  .promotions__dot {
+    width: 7px;
+    height: 7px;
+  }
+
+  .promotions__dot.is-active {
+    width: 23px;
+  }
+}
+
+/* =========================================
+   SMALL MOBILE
+========================================= */
+
+@media (max-width: 380px) {
+  .promotions__container {
+    width: calc(100% - 24px);
+  }
+
+  .promotions__slider {
+    border-radius: 18px;
+  }
+
+  .promotions__arrow {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+/* =========================================
+   ACCESSIBILITY
+========================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .promotions *,
+  .promotions *::before,
+  .promotions *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}

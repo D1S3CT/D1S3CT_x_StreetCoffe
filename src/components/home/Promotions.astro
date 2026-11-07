@@ -1,0 +1,224 @@
+---
+import "./Promotions.css";
+
+const promotions = [
+  {
+    id: 1,
+    desktop: "/promotions/promotion-01-desktop.webp",
+    mobile: "/promotions/promotion-01-mobile.webp",
+    alt: "Акция StreetCoffe — специальное предложение",
+    link: "/menu",
+  },
+  {
+    id: 2,
+    desktop: "/promotions/promotion-02-desktop.webp",
+    mobile: "/promotions/promotion-02-mobile.webp",
+    alt: "Новинки меню StreetCoffe",
+    link: "/menu",
+  },
+  {
+    id: 3,
+    desktop: "/promotions/promotion-03-desktop.webp",
+    mobile: "/promotions/promotion-03-mobile.webp",
+    alt: "Специальные предложения StreetCoffe",
+    link: "/menu",
+  },
+];
+---
+
+<section class="promotions" aria-label="Акции StreetCoffe">
+  <div class="promotions__container">
+
+    <div class="promotions__slider" data-promotion-slider>
+
+      <div class="promotions__track">
+
+        {promotions.map((promotion, index) => (
+          <a
+            class:list={[
+              "promotions__slide",
+              { "is-active": index === 0 },
+            ]}
+            href={promotion.link}
+            aria-label={promotion.alt}
+            aria-hidden={index !== 0 ? "true" : "false"}
+            tabindex={index === 0 ? 0 : -1}
+          >
+            <picture>
+              <source
+                media="(max-width: 700px)"
+                srcset={promotion.mobile}
+              />
+
+              <img
+                src={promotion.desktop}
+                alt={promotion.alt}
+                loading={index === 0 ? "eager" : "lazy"}
+                decoding="async"
+              />
+            </picture>
+          </a>
+        ))}
+
+      </div>
+
+      <!-- Стрелки -->
+      <button
+        class="promotions__arrow promotions__arrow--prev"
+        type="button"
+        aria-label="Предыдущая акция"
+        data-promotion-prev
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m15 18-6-6 6-6" />
+        </svg>
+      </button>
+
+      <button
+        class="promotions__arrow promotions__arrow--next"
+        type="button"
+        aria-label="Следующая акция"
+        data-promotion-next
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m9 18 6-6-6-6" />
+        </svg>
+      </button>
+
+      <!-- Индикаторы -->
+      <div
+        class="promotions__dots"
+        aria-label="Выбор акции"
+        data-promotion-dots
+      >
+        {promotions.map((_, index) => (
+          <button
+            class:list={[
+              "promotions__dot",
+              { "is-active": index === 0 },
+            ]}
+            type="button"
+            aria-label={`Перейти к акции ${index + 1}`}
+            aria-current={index === 0 ? "true" : undefined}
+            data-promotion-dot={index}
+          />
+        ))}
+      </div>
+
+    </div>
+
+  </div>
+</section>
+
+<script>
+  const sliders = document.querySelectorAll<HTMLElement>(
+    "[data-promotion-slider]"
+  );
+
+  sliders.forEach((slider) => {
+    const slides = Array.from(
+      slider.querySelectorAll<HTMLElement>(".promotions__slide")
+    );
+
+    const dots = Array.from(
+      slider.querySelectorAll<HTMLButtonElement>("[data-promotion-dot]")
+    );
+
+    const prevButton = slider.querySelector<HTMLButtonElement>(
+      "[data-promotion-prev]"
+    );
+
+    const nextButton = slider.querySelector<HTMLButtonElement>(
+      "[data-promotion-next]"
+    );
+
+    if (!slides.length) return;
+
+    let currentIndex = 0;
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    // Если баннер только один, стрелки и точки не нужны.
+    if (slides.length <= 1) {
+      prevButton?.remove();
+      nextButton?.remove();
+      slider.querySelector("[data-promotion-dots]")?.remove();
+    }
+
+    const showSlide = (index: number) => {
+      currentIndex = (index + slides.length) % slides.length;
+
+      slides.forEach((slide, i) => {
+        const isActive = i === currentIndex;
+
+        slide.classList.toggle("is-active", isActive);
+        slide.setAttribute("aria-hidden", String(!isActive));
+        slide.setAttribute("tabindex", isActive ? "0" : "-1");
+      });
+
+      dots.forEach((dot, i) => {
+        const isActive = i === currentIndex;
+
+        dot.classList.toggle("is-active", isActive);
+
+        if (isActive) {
+          dot.setAttribute("aria-current", "true");
+        } else {
+          dot.removeAttribute("aria-current");
+        }
+      });
+    };
+
+    prevButton?.addEventListener("click", () => {
+      showSlide(currentIndex - 1);
+    });
+
+    nextButton?.addEventListener("click", () => {
+      showSlide(currentIndex + 1);
+    });
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener("click", () => {
+        showSlide(index);
+      });
+    });
+
+    // Свайп на мобильных устройствах.
+    slider.addEventListener(
+      "touchstart",
+      (event) => {
+        touchStartX = event.changedTouches[0].screenX;
+      },
+      { passive: true }
+    );
+
+    slider.addEventListener(
+      "touchend",
+      (event) => {
+        touchEndX = event.changedTouches[0].screenX;
+
+        const difference = touchStartX - touchEndX;
+
+        if (Math.abs(difference) < 50) return;
+
+        if (difference > 0) {
+          showSlide(currentIndex + 1);
+        } else {
+          showSlide(currentIndex - 1);
+        }
+      },
+      { passive: true }
+    );
+
+    // Переключение клавиатурой.
+    slider.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") {
+        showSlide(currentIndex - 1);
+      }
+
+      if (event.key === "ArrowRight") {
+        showSlide(currentIndex + 1);
+      }
+    });
+  });
+</script>
