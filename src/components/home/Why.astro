@@ -1,0 +1,112 @@
+---
+import "./Why.css";
+
+const advantages = [
+  {
+    title: "Разнообразие напитков",
+    description:
+      "Классический кофе, Bubble Tea, холодные и авторские напитки — выбирай свой вкус каждый день.",
+    icon: "/icons/why-variety.svg",
+    alt: "Разнообразие напитков",
+  },
+  {
+    title: "Кофе на каждый день",
+    description:
+      "Любимые классические напитки — капучино, латте, американо, раф. Сбалансированный вкус и стабильное качество в каждой чашке.",
+    icon: "/icons/why-coffee.svg",
+    alt: "Чашка кофе",
+  },
+  {
+    title: "Яркие вкусовые сочетания",
+    description:
+      "Авторские напитки и необычные сочетания вкусов для тех, кто любит пробовать новое и открывать себя в каждом стакане.",
+    icon: "/icons/why-flavours.svg",
+    alt: "Звезда",
+  },
+  {
+    title: "Удобные кофейни в Тольятти",
+    description:
+      "Несколько точек в городе, удобное расположение и кофе, который всегда рядом — по дороге на работу, учёбу или на прогулке.",
+    icon: "/icons/why-location.svg",
+    alt: "Метка расположения",
+  },
+];
+---
+
+<section class="why" id="why" aria-labelledby="why-title">
+  <div class="why__container">
+
+    <!-- Левая часть -->
+    <div class="why__content">
+
+      <div class="why__heading">
+        <p class="why__eyebrow">Почему StreetCoffe</p>
+
+        <h2 class="why__title" id="why-title">
+          Больше, чем просто
+          <span>кофе</span>
+        </h2>
+
+        <p class="why__description">
+          StreetCoffe — это любимые напитки, яркие вкусы
+          и уютная атмосфера, которая всегда рядом.
+          Мы создаём место, куда хочется возвращаться —
+          в любое время и с любым настроением.
+        </p>
+      </div>
+
+      <!-- Преимущества -->
+      <div class="why__features">
+        {advantages.map((item) => (
+          <article class="why-feature">
+
+            <div class="why-feature__icon">
+              <img
+                src={item.icon}
+                alt={item.alt}
+                width="34"
+                height="34"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+
+            <div class="why-feature__content">
+              <h3 class="why-feature__title">
+                {item.title}
+              </h3>
+
+              <p class="why-feature__description">
+                {item.description}
+              </p>
+            </div>
+
+          </article>
+        ))}
+      </div>
+
+    </div>
+
+    <!-- Правая часть: фирменный стакан -->
+    <div class="why__visual">
+
+      <p class="why__handwriting" aria-hidden="true">
+        Каждый<br />
+        напиток —<br />
+        история <span>♡</span>
+      </p>
+
+      <img
+        class="why__cup"
+        src="/why/CoffeCup.webp"
+        alt="Фирменный чёрный стакан StreetCoffe с кофейными брызгами и зёрнами"
+        width="1100"
+        height="1300"
+        loading="lazy"
+        decoding="async"
+      />
+
+    </div>
+
+  </div>
+</section>

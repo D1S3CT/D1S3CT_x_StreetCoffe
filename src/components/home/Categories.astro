@@ -9,38 +9,46 @@ const categories = [
     imageAlt: "Чашка классического кофе",
     href: "/menu?category=coffee",
     theme: "coffee",
-    icon: "coffee",
+    icon: "/icons/",
     background: "#F5E9DE",
+    imageWidth: "84%",
+    imageHeight: "76%",
   },
   {
     title: "Bubble Tea",
-    description: "Яркие напитки\nс тапиокой\nи фруктовыми вкусами",
+    description: "Яркие напитки\nс фруктовыми вкусами",
     image: "/catalog/BubbleTea.webp",
     imageAlt: "Яркий Bubble Tea с тапиокой",
     href: "/menu?category=bubble-tea",
     theme: "bubble",
-    icon: "bubble",
+    icon: "/icons/category-bubble-tea.svg",
     background: "#FBE5EB",
+    imageWidth: "82%",
+    imageHeight: "78%",
   },
   {
     title: "Холодные\nнапитки",
-    description: "Айс-кофе,\nлимонады,\nосвежающие сочетания",
+    description: "Айс-кофе\n и лимонады.",
     image: "/catalog/IceCoffe.webp",
     imageAlt: "Освежающий холодный кофейный напиток",
     href: "/menu?category=cold",
     theme: "cold",
-    icon: "snow",
+    icon: "/icons/category-cold.svg",
     background: "#EAF1F7",
+    imageWidth: "82%",
+    imageHeight: "78%",
   },
   {
     title: "Авторские\nнапитки",
-    description: "Фирменные\nрецепты и уникальные\nсочетания",
+    description: "Фирменные\nрецепты",
     image: "/catalog/MagicCoffe.webp",
     imageAlt: "Авторский кофейный напиток со сливками",
     href: "/menu?category=signature",
     theme: "signature",
-    icon: "star",
+    icon: "/icons/category-signature.svg",
     background: "#F6E9DC",
+    imageWidth: "82%",
+    imageHeight: "80%",
   },
 ];
 ---
@@ -74,9 +82,15 @@ const categories = [
       {categories.map((category) => (
         <article
           class:list={["category-card", `category-card--${category.theme}`]}
-          style={`--card-bg: ${category.background};`}
+          style={`
+            --card-bg: ${category.background};
+            --product-width: ${category.imageWidth};
+            --product-height: ${category.imageHeight};
+          `}
         >
-            <img
+
+          <!-- Прозрачное изображение напитка -->
+          <img
             class="category-card__image"
             src={category.image}
             alt={category.imageAlt}
@@ -86,8 +100,7 @@ const categories = [
             decoding="async"
           />
 
-          <div class="category-card__overlay" aria-hidden="true"></div>
-
+          <!-- Текст карточки -->
           <div class="category-card__content">
             <h3 class="category-card__title">
               {category.title.split("\n").map((line) => (
@@ -108,51 +121,36 @@ const categories = [
             </p>
           </div>
 
+          <!-- Иконка категории -->
           <span class="category-card__badge" aria-hidden="true">
-            {category.icon === "coffee" && (
-              <svg viewBox="0 0 32 32">
-                <path d="M8 11h16l-1.5 17h-13L8 11Z" />
-                <path d="M6 7h20v4H6zM12 4h8" />
-                <path d="M11 15h10" />
-              </svg>
-            )}
-
-            {category.icon === "bubble" && (
-              <svg viewBox="0 0 32 32">
-                <path d="M11 9h13l-1.5 19h-10L11 9Z" />
-                <path d="M15 5h5M17 5v4M14 14l2 2M20 14l-2 2" />
-                <circle cx="15" cy="22" r="1" />
-                <circle cx="19" cy="25" r="1" />
-              </svg>
-            )}
-
-            {category.icon === "snow" && (
-              <svg viewBox="0 0 32 32">
-                <path d="M16 3v26M4.7 9.5l22.6 13M4.7 22.5l22.6-13" />
-                <path d="m12 6 4 3 4-3M12 26l4-3 4 3M6 14l5-1-1-5M26 18l-5 1 1 5M6 18l5 1-1 5M26 14l-5-1 1-5" />
-              </svg>
-            )}
-
-            {category.icon === "star" && (
-              <svg viewBox="0 0 32 32">
-                <path d="m16 3 4 8 9 1.3-6.5 6.3L24 28l-8-4.2L8 28l1.5-9.4L3 12.3 12 11l4-8Z" />
-              </svg>
-            )}
+            <img
+              src={category.icon}
+              alt=""
+              width="30"
+              height="30"
+              loading="lazy"
+            />
           </span>
 
-          <a class="category-card__link" href={category.href}>
-            <span>Смотреть</span>
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="m9 5 7 7-7 7" />
-            </svg>
-          </a>
+          <!-- Кнопка -->
+            <a class="category-card__link" href={category.href}>
+              <span>Смотреть</span>
+
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="m9 5 7 7-7 7" />
+              </svg>
+            </a>
+
         </article>
       ))}
     </div>
 
+    <!-- Полный каталог -->
     <div class="categories-promo">
+
       <div class="categories-promo__title">
         <p class="categories-promo__eyebrow">Полный ассортимент</p>
+
         <h3>
           Смотри весь<br />
           <span>каталог напитков</span>
@@ -162,29 +160,43 @@ const categories = [
       <div class="categories-promo__divider" aria-hidden="true"></div>
 
       <ul class="categories-promo__benefits">
+
         <li>
-          <svg viewBox="0 0 32 32" aria-hidden="true">
-            <path d="M9 9h15l-1.5 19h-12L9 9Z" />
-            <path d="M7 5h19v4H7zM13 2h7" />
-            <path d="M24 12h3v7h-4" />
-          </svg>
+          <img
+            src="/icons/promo-cup.svg"
+            alt=""
+            width="32"
+            height="32"
+            aria-hidden="true"
+          />
           <span>Более 50<br />напитков</span>
         </li>
 
         <li>
-          <svg viewBox="0 0 32 32" aria-hidden="true">
-            <path d="M27 5C15 4 6 10 5 20c-.5 5 3 8 7 7 10-1 16-12 15-22Z" />
-            <path d="M6 27 23 8" />
-          </svg>
-          <span>Классика<br /><small>и авторские рецепты</small></span>
+          <img
+            src="/icons/promo-leaf.svg"
+            alt=""
+            width="32"
+            height="32"
+            aria-hidden="true"
+          />
+          <span>
+            Классика<br />
+            <small>и авторские рецепты</small>
+          </span>
         </li>
 
         <li>
-          <svg viewBox="0 0 32 32" aria-hidden="true">
-            <path d="M16 27S4 19 4 11a6 6 0 0 1 12-1 6 6 0 0 1 12 1c0 8-12 16-12 16Z" />
-          </svg>
+          <img
+            src="/icons/promo-heart.svg"
+            alt=""
+            width="32"
+            height="32"
+            aria-hidden="true"
+          />
           <span>Новые вкусы<br />каждый сезон</span>
         </li>
+
       </ul>
 
       <img
@@ -195,12 +207,14 @@ const categories = [
         loading="lazy"
       />
 
-      <a class="categories-promo__button" href="/menu">
-        <span>Перейти в каталог</span>
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="m9 5 7 7-7 7" />
-        </svg>
-      </a>
+        <a class="categories-promo__button" href="/menu">
+          <span>Перейти в каталог</span>
+
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="m9 5 7 7-7 7" />
+          </svg>
+        </a>
+
     </div>
 
   </div>

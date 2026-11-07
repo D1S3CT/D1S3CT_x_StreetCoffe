@@ -774,3 +774,176 @@
   }
 }
 
+/* =========================================
+   DESKTOP WIDTH — MATCH HERO
+========================================= */
+
+@media (min-width: 901px) {
+  .categories__container {
+    width: min(calc(100% - 10.5%), 1640px);
+    max-width: none;
+  }
+}
+
+/* =========================================
+   COMPACT CATEGORY CARDS
+========================================= */
+
+@media (min-width: 901px) {
+  .categories__grid {
+    gap: clamp(18px, 1.4vw, 24px);
+  }
+
+  .category-card {
+    aspect-ratio: auto;
+    height: clamp(340px, 22vw, 390px);
+    border-radius: 22px;
+  }
+
+  .category-card__content {
+    top: 24px;
+    left: 24px;
+    right: 64px;
+  }
+
+  .category-card__badge {
+    top: 18px;
+    right: 18px;
+  }
+}
+
+/* =========================================
+   ARROW ALIGNMENT
+========================================= */
+
+.category-card__link img,
+.category-card__link svg,
+.categories-promo__button img,
+.categories-promo__button svg {
+  display: block;
+  align-self: center;
+  flex-shrink: 0;
+  vertical-align: middle;
+  transform: translateY(1px);
+}
+
+.category-card__link img,
+.category-card__link svg {
+  width: 19px;
+  height: 19px;
+}
+
+.categories-promo__button img,
+.categories-promo__button svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Hover animation — arrow moves horizontally, not vertically */
+
+.category-card__link:hover img,
+.category-card__link:hover svg {
+  transform: translate(3px, 1px);
+}
+
+.categories-promo__button:hover img,
+.categories-promo__button:hover svg {
+  transform: translate(4px, 1px);
+}
+
+/* =========================================
+   TABLET WIDTH
+========================================= */
+
+@media (max-width: 900px) {
+  .categories__container {
+    width: calc(100% - 64px);
+  }
+}
+
+/* =========================================
+   MOBILE WIDTH
+========================================= */
+
+@media (max-width: 600px) {
+  .categories__container {
+    width: calc(100% - 32px);
+  }
+}
+
+/* =========================================
+   MOBILE TYPOGRAPHY — IMPROVED READABILITY
+========================================= */
+
+@media (max-width: 600px) {
+
+  /* Популярные категории */
+  .categories__eyebrow {
+    font-size: 11px;
+  }
+
+  .categories__title {
+    font-size: clamp(37px, 9.5vw, 51px);
+  }
+
+  .categories__description {
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  /* Заголовки карточек */
+  .category-card__title {
+    font-size: clamp(28px, 7.2vw, 34px);
+    line-height: 1.08;
+  }
+
+  /* Описание карточек */
+  .category-card__description {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  /* Кнопки */
+  .category-card__link {
+    font-size: 15px;
+    min-height: 50px;
+  }
+
+  /* Полный каталог */
+  .categories-promo__eyebrow {
+    font-size: 11px;
+  }
+
+  .categories-promo__benefits li {
+    font-size: 15px;
+    line-height: 1.4;
+  }
+
+  .categories-promo__benefits small {
+    font-size: 14px;
+  }
+
+  .categories-promo__button {
+    font-size: 15px;
+  }
+}
+
+/* Узкие смартфоны */
+@media (max-width: 380px) {
+
+  .categories__title {
+    font-size: 35px;
+  }
+
+  .categories__description {
+    font-size: 14px;
+  }
+
+  .category-card__title {
+    font-size: 27px;
+  }
+
+  .category-card__description {
+    font-size: 15px;
+  }
+}
