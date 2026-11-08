@@ -1492,3 +1492,41 @@
     height: 100% !important;
   }
 }
+
+/* =========================================
+   FIX: PROMO IMAGE — FULL COVER
+========================================= */
+
+.article-promo {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background: #111;
+}
+
+.article-sidebar .article-promo > img,
+.blog-sidebar .article-promo > img {
+  position: absolute !important;
+  z-index: -2 !important;
+
+  inset: 0;
+
+  display: block;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  max-width: none !important;
+  max-height: none !important;
+
+  margin: 0 !important;
+
+  object-fit: cover !important;
+  object-position: center center;
+
+  border-radius: inherit;
+}
+
+.article-promo::after {
+  z-index: -1;
+}

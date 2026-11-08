@@ -2,7 +2,7 @@
 category: Наши кофейни
 description: "Адреса кофеен StreetCoffee в Тольятти. Найдите ближайшую точку, выберите удобное расположение и постройте маршрут."
 heroImage: /blog/locations-hero.webp
-promoImage: /images/articles/locations-promo.webp
+promoImage: /blog/coffee-promo.webp
 readingTime: 4 минуты
 slug: locations
 title: Наши кофейни

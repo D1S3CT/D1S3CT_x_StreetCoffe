@@ -2,7 +2,7 @@
 category: Bubble Tea
 description: "Знакомимся с Bubble Tea: чайной основой, тапиокой, поппинг-бобой, топпингами и популярными сочетаниями вкусов."
 heroImage: /blog/bubble-tea-hero.webp
-promoImage: /images/articles/bubble-tea-promo.webp
+promoImage: /blog/coffee-promo.webp
 readingTime: 6 минут
 slug: bubble-tea
 title: Мир Bubble Tea

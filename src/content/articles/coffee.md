@@ -1,8 +1,8 @@
 ---
 category: Всё о кофе
 description: Узнайте, откуда появился кофе, чем отличаются арабика и робуста, как обжарка влияет на вкус и какие способы приготовления стоит попробовать.
-heroImage: /blog/blog-coffee.png
-promoImage: /images/articles/coffee-promo.webp
+heroImage: /blog/blog-coffee.webp
+promoImage: /blog/coffee-promo.webp
 readingTime: 8 минут
 slug: coffee
 title: Всё о кофе

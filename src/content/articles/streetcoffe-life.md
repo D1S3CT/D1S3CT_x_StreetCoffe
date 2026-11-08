@@ -2,7 +2,7 @@
 category: Жизнь StreetCoffee
 description: "Знакомимся с жизнью StreetCoffee: атмосферой кофеен, любимыми напитками, сезонными вкусами и историями, которые создают настроение каждый день."
 heroImage: /blog/streetcoffe-life-hero.webp
-promoImage: /images/articles/streetcoffe-life-promo.webp
+promoImage: /blog/coffee-promo.webp
 readingTime: 5 минут
 slug: streetcoffe-life
 title: Жизнь StreetCoffee

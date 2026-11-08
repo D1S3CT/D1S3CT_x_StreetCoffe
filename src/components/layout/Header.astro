@@ -24,27 +24,27 @@ const navItems = [
   },
   {
     label: "Меню",
-    href: "#categories",
+    href: currentPath === "/" ? "#categories" : "/#categories",
     active: false,
   },
   {
     label: "О нас",
-    href: "#why",
+    href: currentPath === "/" ? "#why" : "/#why",
     active: false,
   },
   {
     label: "Наши кофейни",
-    href: "#locations",
+    href: currentPath === "/" ? "#locations" : "/#locations",
     active: false,
   },
   {
     label: "Блог",
-    href: "/#blog",
+    href: currentPath === "/" ? "#blog" : "/#blog",
     active: isArticlePage,
   },
   {
     label: "FAQ",
-    href: "#faq",
+    href: currentPath === "/" ? "#faq" : "/#faq",
     active: false,
   },
 ];
