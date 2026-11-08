@@ -273,8 +273,6 @@ import { locations } from "../../data/locations";
           card.querySelector(".location-card__title")
             ?.textContent?.toLowerCase() || "";
 
-        const name = card.getAttribute("data-name") || "";
-
         const matches = `${address} ${title}`.includes(query);
 
         card.toggleAttribute("hidden", !matches);

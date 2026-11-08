@@ -1,85 +1,194 @@
 import {
   Map as MapLibreMap,
-  Marker,
   Popup,
-  LngLatBounds,
   setWorkerUrl,
 } from "maplibre-gl";
 
 import workerUrl from "maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url";
-
 import "maplibre-gl/dist/maplibre-gl.css";
 
 import { locations } from "../data/locations";
 
-// Настройка Worker для Vite / Astro
 setWorkerUrl(workerUrl);
 
-// Стиль OpenFreeMap Bright
 const MAP_STYLE = "https://tiles.openfreemap.org/styles/bright";
-
-// Начальная позиция — Автозаводский район Тольятти
 const CITY_CENTER = [49.275, 53.518];
 const INITIAL_ZOOM = 12.8;
+const LOCATION_ZOOM = 15;
 
-// Коллекция маркеров
-const markers = new globalThis.Map();
+const SOURCE_ID = "streetcoffe-locations";
+const CLUSTERS_LAYER_ID = "streetcoffe-clusters";
+const CLUSTER_COUNT_LAYER_ID = "streetcoffe-cluster-count";
+const POINTS_LAYER_ID = "streetcoffe-points";
+const PIN_IMAGE_ID = "streetcoffe-coffee-pin";
 
+let activeMap = null;
 let activePopup = null;
-let currentMap = null;
+let activePopupLocationId = null;
 let resizeObserver = null;
+let resizeHandler = null;
+let orientationHandler = null;
+let filterAbortController = null;
+let focusRequestId = 0;
+
+const isValidLocation = (location) =>
+  Number.isFinite(location.lng) &&
+  Number.isFinite(location.lat) &&
+  location.lng >= -180 &&
+  location.lng <= 180 &&
+  location.lat >= -90 &&
+  location.lat <= 90;
+
+const validLocations = locations.filter(isValidLocation);
+
+const locationsToGeoJSON = (items) => ({
+  type: "FeatureCollection",
+  features: items.map((location) => ({
+    type: "Feature",
+    id: location.id,
+    properties: {
+      id: location.id,
+      name: location.name,
+      address: location.address,
+      image: location.image,
+      open: location.hours?.open ?? "",
+      close: location.hours?.close ?? "",
+    },
+    geometry: {
+      type: "Point",
+      coordinates: [location.lng, location.lat],
+    },
+  })),
+});
 
 // ========================================
-// СОЗДАНИЕ HTML МАРКЕРА
+// ИКОНКА МАРКЕРА
 // ========================================
 
-const createMarkerElement = (location) => {
-  const button = document.createElement("button");
-
-  button.type = "button";
-  button.className = "streetcoffe-marker";
-
-  button.setAttribute(
-    "aria-label",
-    `Кофейня ${location.name}`
-  );
-
-  button.innerHTML = `
-    <span class="streetcoffe-marker__pin">
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path
-          d="M5 8h12v6a5 5 0 0 1-5 5h-2a5 5 0 0 1-5-5V8Z"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-        />
-        <path
-          d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-        />
-        <path
-          d="M8 4c0 1 1 1 1 2M12 4c0 1 1 1 1 2"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.6"
-        />
-        <path
-          d="M4 21h16"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-        />
+const createPinImage = (map) =>
+  new Promise((resolve) => {
+    const svg = `
+      <svg xmlns="http://www.w3.org/2000/svg" width="72" height="88" viewBox="0 0 72 88">
+        <path d="M36 3C17.8 3 4 16.8 4 34.2c0 22.2 32 49.8 32 49.8s32-27.6 32-49.8C68 16.8 54.2 3 36 3Z"
+          fill="#171717" stroke="#ffffff" stroke-width="5" stroke-linejoin="round"/>
+        <path d="M36 3C17.8 3 4 16.8 4 34.2c0 22.2 32 49.8 32 49.8s32-27.6 32-49.8C68 16.8 54.2 3 36 3Z"
+          fill="none" stroke="#d99a61" stroke-width="1.2" opacity=".75"/>
+        <g transform="translate(19 19)" fill="none" stroke="#d99a61" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 12h22v11a8 8 0 0 1-8 8h-6a8 8 0 0 1-8-8V12Z"/>
+          <path d="M26 15h3a5 5 0 0 1 0 10h-4"/>
+          <path d="M10 5c0 2 2 2 2 4M17 5c0 2 2 2 2 4"/>
+          <path d="M2 35h29"/>
+        </g>
       </svg>
-    </span>
-  `;
+    `;
 
-  return button;
+    const image = new Image();
+
+    image.onload = () => {
+      if (!map.hasImage(PIN_IMAGE_ID)) {
+        map.addImage(PIN_IMAGE_ID, image, {
+          pixelRatio: 2,
+        });
+      }
+
+      resolve();
+    };
+
+    image.onerror = () => resolve();
+
+    image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+  });
+
+// ========================================
+// КЛАСТЕРЫ И СЛОИ КАРТЫ
+// ========================================
+
+const addClusterLayers = (map) => {
+  if (!map.getSource(SOURCE_ID)) {
+    map.addSource(SOURCE_ID, {
+      type: "geojson",
+      data: locationsToGeoJSON(validLocations),
+      cluster: true,
+      clusterMaxZoom: 14,
+      clusterRadius: 58,
+      clusterMinPoints: 2,
+    });
+  }
+
+  if (!map.getLayer(CLUSTERS_LAYER_ID)) {
+    map.addLayer({
+      id: CLUSTERS_LAYER_ID,
+      type: "circle",
+      source: SOURCE_ID,
+      filter: ["has", "point_count"],
+      paint: {
+        "circle-color": "#171717",
+        "circle-radius": [
+          "step",
+          ["get", "point_count"],
+          23,
+          5, 27,
+          10, 31,
+        ],
+        "circle-stroke-width": 3,
+        "circle-stroke-color": "#ffffff",
+        "circle-opacity": 0.98,
+      },
+    });
+  }
+
+  if (!map.getLayer(CLUSTER_COUNT_LAYER_ID)) {
+    map.addLayer({
+      id: CLUSTER_COUNT_LAYER_ID,
+      type: "symbol",
+      source: SOURCE_ID,
+      filter: ["has", "point_count"],
+      layout: {
+        "text-field": ["get", "point_count_abbreviated"],
+        "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
+        "text-size": 14,
+        "text-allow-overlap": true,
+        "text-ignore-placement": true,
+      },
+      paint: {
+        "text-color": "#d99a61",
+      },
+    });
+  }
+
+  if (!map.getLayer(POINTS_LAYER_ID)) {
+    map.addLayer({
+      id: POINTS_LAYER_ID,
+      type: "symbol",
+      source: SOURCE_ID,
+      filter: ["!", ["has", "point_count"]],
+      layout: {
+        "icon-image": PIN_IMAGE_ID,
+        "icon-size": 0.82,
+        "icon-anchor": "bottom",
+        "icon-allow-overlap": true,
+        "icon-ignore-placement": true,
+      },
+    });
+  }
 };
 
 // ========================================
-// СОЗДАНИЕ POPUP
+// АКТИВНАЯ КАРТОЧКА
+// ========================================
+
+const activateCard = (id) => {
+  document.querySelectorAll("[data-location-card]").forEach((card) => {
+    card.classList.toggle(
+      "is-active",
+      id !== null &&
+        Number(card.dataset.locationId) === id,
+    );
+  });
+};
+
+// ========================================
+// СОДЕРЖИМОЕ POPUP
 // ========================================
 
 const createPopupContent = (location) => {
@@ -91,7 +200,8 @@ const createPopupContent = (location) => {
 
   const image = document.createElement("img");
   image.src = location.image;
-  image.alt = `Интерьер кофейни ${location.name}`;
+  image.alt = `Кофейня ${location.name}`;
+  image.loading = "lazy";
 
   image.addEventListener("error", () => {
     image.classList.add("image-error");
@@ -112,164 +222,242 @@ const createPopupContent = (location) => {
 
   const hours = document.createElement("span");
   hours.className = "streetcoffe-popup__hours";
-  hours.textContent = `${location.hours.open} — ${location.hours.close}`;
+  hours.textContent =
+    `${location.hours.open} — ${location.hours.close}`;
 
   const route = document.createElement("a");
   route.className = "streetcoffe-popup__route";
 
   route.href = `https://yandex.ru/maps/?text=${encodeURIComponent(
-    `Тольятти, ${location.address}`
+    `Тольятти, ${location.address}`,
   )}`;
 
   route.target = "_blank";
   route.rel = "noopener noreferrer";
   route.textContent = "Построить маршрут";
 
-  content.append(
-    title,
-    address,
-    hours,
-    route
-  );
-
+  content.append(title, address, hours, route);
   wrapper.append(photo, content);
 
   return wrapper;
 };
 
 // ========================================
-// АКТИВНАЯ КАРТОЧКА
+// УПРАВЛЕНИЕ POPUP
 // ========================================
 
-const activateCard = (id) => {
-  document
-    .querySelectorAll("[data-location-card]")
-    .forEach((card) => {
-      card.classList.toggle(
-        "is-active",
-        Number(card.dataset.locationId) === id
-      );
-    });
+const closeActivePopup = () => {
+  if (activePopup) {
+    activePopup.remove();
+  }
+
+  activePopup = null;
+  activePopupLocationId = null;
+
+  activateCard(null);
 };
 
-// ========================================
-// ОТКРЫТИЕ POPUP
-// ========================================
-
 const openLocationPopup = (location, map) => {
-  activePopup?.remove();
-
-  activateCard(location.id);
+  closeActivePopup();
 
   const popup = new Popup({
-    offset: 35,
+    anchor: "bottom",
+    offset: 18,
     closeButton: true,
     closeOnClick: false,
+    closeOnMove: false,
+    focusAfterOpen: false,
     maxWidth: "340px",
     className: "streetcoffe-map-popup",
   })
     .setLngLat([location.lng, location.lat])
-    .setDOMContent(createPopupContent(location))
-    .addTo(map);
+    .setDOMContent(createPopupContent(location));
 
-  activePopup = popup;
+  popup.on("open", () => {
+    activePopup = popup;
+    activePopupLocationId = location.id;
+
+    activateCard(location.id);
+  });
 
   popup.on("close", () => {
     if (activePopup === popup) {
       activePopup = null;
+      activePopupLocationId = null;
+
       activateCard(null);
     }
+  });
+
+  popup.addTo(map);
+};
+
+// ========================================
+// ПОИСК КОФЕЙНИ ПО ID
+// ========================================
+
+const getLocationById = (id) =>
+  validLocations.find(
+    (location) => location.id === Number(id),
+  );
+
+// ========================================
+// ПЕРЕХОД К КОФЕЙНЕ
+// ========================================
+
+const focusLocation = (location, map) => {
+  if (!isValidLocation(location)) return;
+
+  const requestId = ++focusRequestId;
+
+  map.stop();
+  closeActivePopup();
+
+  const targetZoom = Math.max(
+    map.getZoom(),
+    LOCATION_ZOOM,
+  );
+
+  map.easeTo({
+    center: [location.lng, location.lat],
+    zoom: Math.min(targetZoom, 18),
+    duration: 550,
+    essential: true,
+    padding: {
+      top: 100,
+      bottom: 90,
+      left: 35,
+      right: 35,
+    },
+  });
+
+  map.once("moveend", () => {
+    if (requestId !== focusRequestId) return;
+    if (!map.getContainer().isConnected) return;
+
+    openLocationPopup(location, map);
   });
 };
 
 // ========================================
-// ДОБАВЛЕНИЕ МАРКЕРОВ
+// ОТКРЫТИЕ КОФЕЙНИ ПО МАРКЕРУ
 // ========================================
 
-const addMarkers = (map) => {
-  // Защита от повторного добавления
-  markers.forEach((marker) => marker.remove());
-  markers.clear();
+const showLocationFromFeature = (feature, map) => {
+  const id = Number(feature.properties?.id);
+  const location = getLocationById(id);
 
-  locations.forEach((location) => {
-    // Пропускаем филиалы без координат
-    if (
-      typeof location.lng !== "number" ||
-      typeof location.lat !== "number"
-    ) {
-      return;
+  if (!location) return;
+
+  openLocationPopup(location, map);
+};
+
+// ========================================
+// ОБРАБОТКА КЛИКОВ ПО КАРТЕ
+// ========================================
+
+const setupMapInteractions = (map) => {
+  // Нажатие на кластер приближает карту
+  map.on("click", CLUSTERS_LAYER_ID, (event) => {
+    const feature = event.features?.[0];
+
+    if (!feature) return;
+
+    const clusterId = feature.properties.cluster_id;
+    const source = map.getSource(SOURCE_ID);
+
+    if (!source) return;
+
+    source.getClusterExpansionZoom(
+      clusterId,
+      (error, zoom) => {
+        if (error || !Number.isFinite(zoom)) return;
+
+        map.easeTo({
+          center: feature.geometry.coordinates,
+          zoom: Math.min(zoom + 0.5, 18),
+          duration: 450,
+          essential: true,
+        });
+      },
+    );
+  });
+
+  // Нажатие на отдельную кофейню открывает её плашку
+  map.on("click", POINTS_LAYER_ID, (event) => {
+    const feature = event.features?.[0];
+
+    if (feature) {
+      showLocationFromFeature(feature, map);
     }
+  });
 
-    const element = createMarkerElement(location);
-
-    const marker = new Marker({
-      element,
-      anchor: "bottom",
-    })
-      .setLngLat([location.lng, location.lat])
-      .addTo(map);
-
-    element.addEventListener("click", () => {
-      map.flyTo({
-        center: [location.lng, location.lat],
-        zoom: Math.max(map.getZoom(), 14),
-        speed: 1.2,
-        essential: true,
-      });
-
-      openLocationPopup(location, map);
+  [CLUSTERS_LAYER_ID, POINTS_LAYER_ID].forEach((layerId) => {
+    map.on("mouseenter", layerId, () => {
+      map.getCanvas().style.cursor = "pointer";
     });
 
-    markers.set(location.id, marker);
+    map.on("mouseleave", layerId, () => {
+      map.getCanvas().style.cursor = "";
+    });
   });
 
-  console.log(
-    "StreetCoffe: маркеров добавлено:",
-    markers.size
-  );
+  // Клик по пустому месту закрывает плашку
+  map.on("click", (event) => {
+    const features = map.queryRenderedFeatures(
+      event.point,
+      {
+        layers: [
+          CLUSTERS_LAYER_ID,
+          POINTS_LAYER_ID,
+        ],
+      },
+    );
+
+    if (!features.length) {
+      closeActivePopup();
+    }
+  });
 };
 
 // ========================================
-// СИНХРОНИЗАЦИЯ МАРКЕРОВ С ПОИСКОМ
+// СИНХРОНИЗАЦИЯ С ПОИСКОМ
 // ========================================
 
-const syncMarkers = (visibleIds) => {
-  const visibleSet = new Set(visibleIds);
+const syncMarkers = (visibleIds, map) => {
+  const visibleSet = new Set(
+    (visibleIds || []).map(Number),
+  );
 
-  markers.forEach((marker, id) => {
-    marker.getElement().style.display =
-      visibleSet.has(id) ? "" : "none";
-  });
+  const filtered = validLocations.filter((location) =>
+    visibleSet.has(location.id),
+  );
 
-  if (activePopup) {
-    const popupLocation = locations.find(
-      (location) =>
-        location.lng === activePopup.getLngLat().lng &&
-        location.lat === activePopup.getLngLat().lat
-    );
+  const source = map.getSource(SOURCE_ID);
 
-    if (
-      popupLocation &&
-      !visibleSet.has(popupLocation.id)
-    ) {
-      activePopup.remove();
-      activePopup = null;
-      activateCard(null);
-    }
+  if (source) {
+    source.setData(locationsToGeoJSON(filtered));
+  }
+
+  if (
+    activePopupLocationId !== null &&
+    !visibleSet.has(activePopupLocationId)
+  ) {
+    closeActivePopup();
   }
 };
 
 // ========================================
-// ВЗАИМОДЕЙСТВИЕ С КАРТОЧКАМИ
+// СВЯЗЬ КАРТОЧЕК С КАРТОЙ
 // ========================================
 
 const setupCardInteractions = (map) => {
   const section = document.querySelector(".locations");
 
-  if (!section) return;
-
-  // Не добавляем обработчик повторно
-  if (section.dataset.mapInteractionsInitialized === "true") {
+  if (
+    !section ||
+    section.dataset.mapInteractionsInitialized === "true"
+  ) {
     return;
   }
 
@@ -280,38 +468,84 @@ const setupCardInteractions = (map) => {
 
     if (!(target instanceof Element)) return;
 
-    // Не перехватываем нажатия по ссылкам
-    if (target.closest("a")) return;
-
-    const card = target.closest("[data-location-card]");
-
-    if (!card) return;
-
-    const locationId = Number(card.dataset.locationId);
-
-    const location = locations.find(
-      (item) => item.id === locationId
-    );
-
-    if (!location) return;
-
-    // Если координат пока нет — просто выделяем карточку
     if (
-      typeof location.lng !== "number" ||
-      typeof location.lat !== "number"
+      target.closest("a, button, select, input")
     ) {
-      activateCard(location.id);
       return;
     }
 
-    map.flyTo({
-      center: [location.lng, location.lat],
-      zoom: Math.max(map.getZoom(), 14),
-      speed: 1.2,
-      essential: true,
-    });
+    const card = target.closest("[data-location-card]");
 
-    openLocationPopup(location, map);
+    if (!card || card.hidden) return;
+
+    const location = getLocationById(
+      card.dataset.locationId,
+    );
+
+    if (location) {
+      focusLocation(location, map);
+    }
+  });
+};
+
+// ========================================
+// АДАПТАЦИЯ РАЗМЕРА КАРТЫ
+// ========================================
+
+const setupResize = (container, map) => {
+  if (resizeObserver) {
+    resizeObserver.disconnect();
+  }
+
+  let frame = 0;
+
+  const resizeMap = () => {
+    cancelAnimationFrame(frame);
+
+    frame = requestAnimationFrame(() => {
+      if (container.isConnected) {
+        map.resize();
+      }
+    });
+  };
+
+  resizeObserver = new ResizeObserver(resizeMap);
+  resizeObserver.observe(container);
+
+  if (resizeHandler) {
+    window.removeEventListener(
+      "resize",
+      resizeHandler,
+    );
+  }
+
+  if (orientationHandler) {
+    window.removeEventListener(
+      "orientationchange",
+      orientationHandler,
+    );
+  }
+
+  resizeHandler = resizeMap;
+
+  orientationHandler = () => {
+    window.setTimeout(resizeMap, 250);
+  };
+
+  window.addEventListener(
+    "resize",
+    resizeHandler,
+    { passive: true },
+  );
+
+  window.addEventListener(
+    "orientationchange",
+    orientationHandler,
+    { passive: true },
+  );
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(resizeMap);
   });
 };
 
@@ -320,7 +554,9 @@ const setupCardInteractions = (map) => {
 // ========================================
 
 const initLocationsMap = () => {
-  const container = document.querySelector("#streetcoffe-map");
+  const container = document.querySelector(
+    "#streetcoffe-map",
+  );
 
   if (
     !container ||
@@ -331,13 +567,9 @@ const initLocationsMap = () => {
 
   container.dataset.initialized = "true";
 
-  console.log("StreetCoffe: инициализация карты...");
-
   const map = new MapLibreMap({
     container,
     style: MAP_STYLE,
-
-    // Начальная позиция — Автозаводский район
     center: CITY_CENTER,
     zoom: INITIAL_ZOOM,
 
@@ -349,64 +581,73 @@ const initLocationsMap = () => {
     dragRotate: false,
     pitchWithRotate: false,
     touchPitch: false,
+
+    cooperativeGestures: false,
+    trackResize: true,
   });
 
-  currentMap = map;
+  activeMap = map;
 
-  // Карта полностью загружена
-  map.on("load", () => {
-    console.log("StreetCoffe: карта загружена");
+  map.on("load", async () => {
+    if (!container.isConnected) return;
 
     map.resize();
 
-    // Добавляем маркеры
-    addMarkers(map);
+    await createPinImage(map);
 
-    // Связываем карточки с картой
+    if (
+      !container.isConnected ||
+      map !== activeMap
+    ) {
+      return;
+    }
+
+    addClusterLayers(map);
+    setupMapInteractions(map);
     setupCardInteractions(map);
 
-    // Синхронизируем начальную видимость
     const visibleIds = Array.from(
       document.querySelectorAll(
-        "[data-location-card]:not([hidden])"
-      )
-    ).map((card) => Number(card.dataset.locationId));
+        "[data-location-card]:not([hidden])",
+      ),
+    ).map((card) =>
+      Number(card.dataset.locationId),
+    );
 
-    syncMarkers(visibleIds);
+    syncMarkers(visibleIds, map);
 
-    // Сохраняем начальное положение
     map.jumpTo({
       center: CITY_CENTER,
       zoom: INITIAL_ZOOM,
     });
   });
 
-  // Загрузка стиля
-  map.on("style.load", () => {
-    console.log("StreetCoffe: стиль Bright загружен");
-  });
-
-  // Ошибки карты
   map.on("error", (event) => {
     console.error(
       "StreetCoffe map error:",
-      event.error || event
+      event.error || event,
     );
   });
 
-  // Отслеживание изменения размеров
-  resizeObserver = new ResizeObserver(() => {
-    map.resize();
-  });
+  setupResize(container, map);
 
-  resizeObserver.observe(container);
+  if (filterAbortController) {
+    filterAbortController.abort();
+  }
 
-  // Синхронизация поиска и сортировки
+  filterAbortController = new AbortController();
+
   document.addEventListener(
     "streetcoffe:locations-filtered",
     (event) => {
-      syncMarkers(event.detail?.visibleIds || []);
-    }
+      syncMarkers(
+        event.detail?.visibleIds || [],
+        map,
+      );
+    },
+    {
+      signal: filterAbortController.signal,
+    },
   );
 
   container._streetCoffeMap = map;
@@ -420,5 +661,5 @@ initLocationsMap();
 
 document.addEventListener(
   "astro:page-load",
-  initLocationsMap
+  initLocationsMap,
 );

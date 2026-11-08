@@ -497,406 +497,99 @@
    MAP PLACEHOLDER
 ========================================= */
 
-.locations__map {
-  position: relative;
-  isolation: isolate;
 
-  min-width: 0;
-  min-height: 635px;
-
-  overflow: hidden;
-  border-radius: 20px;
-
-  background: #e9e8d8;
-  box-shadow: 0 8px 28px rgba(35, 25, 15, 0.06);
-}
 
 /* Фон карты */
 
-.locations__map-art {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
 
-  background-color: #e9e8d8;
-
-  background-image:
-    linear-gradient(90deg, rgba(255, 255, 255, 0.2) 1px, transparent 1px),
-    linear-gradient(rgba(255, 255, 255, 0.2) 1px, transparent 1px);
-
-  background-size: 42px 42px;
-}
 
 /* Кварталы */
 
-.map-art__blocks {
-  position: absolute;
-  inset: -10%;
 
-  background-image:
-    repeating-linear-gradient(
-      0deg,
-      transparent 0 35px,
-      rgba(255, 255, 255, 0.48) 36px 40px,
-      transparent 41px 76px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent 0 47px,
-      rgba(255, 255, 255, 0.48) 48px 52px,
-      transparent 53px 94px
-    );
-
-  transform: rotate(-8deg) scale(1.15);
-}
 
 /* Зелёные зоны */
 
-.map-art__parks {
-  position: absolute;
-  inset: 0;
 
-  background:
-    radial-gradient(ellipse at 15% 20%, rgba(164, 190, 139, 0.65) 0 10%, transparent 10.5%),
-    radial-gradient(ellipse at 75% 18%, rgba(164, 190, 139, 0.65) 0 12%, transparent 12.5%),
-    radial-gradient(ellipse at 28% 72%, rgba(164, 190, 139, 0.55) 0 10%, transparent 10.5%),
-    radial-gradient(ellipse at 85% 70%, rgba(164, 190, 139, 0.55) 0 9%, transparent 9.5%);
-}
 
 /* Волга */
 
-.map-art__water {
-  position: absolute;
-  z-index: 1;
 
-  right: -10%;
-  bottom: -20%;
 
-  width: 125%;
-  height: 31%;
 
-  border-radius: 50% 0 0 0;
-
-  background:
-    linear-gradient(170deg, rgba(255, 255, 255, 0.25), transparent 30%),
-    #9bc9d9;
-
-  transform: rotate(-4deg);
-}
-
-.map-art__river-label {
-  position: absolute;
-  z-index: 2;
-  right: 42%;
-  bottom: 7%;
-
-  color: #347c9a;
-  font-size: 13px;
-  font-style: italic;
-}
 
 /* Дороги */
 
-.map-art__road {
-  position: absolute;
-  z-index: 2;
 
-  height: 4px;
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: 50px;
 
-  background: #f5c77d;
-  box-shadow: 0 0 0 1px rgba(225, 174, 98, 0.18);
 
-  transform-origin: center;
-}
 
-.map-art__road--one {
-  top: 25%;
-  left: -10%;
-  width: 125%;
-  transform: rotate(13deg);
-}
 
-.map-art__road--two {
-  top: 49%;
-  left: -10%;
-  width: 125%;
-  transform: rotate(-9deg);
-}
 
-.map-art__road--three {
-  top: 72%;
-  left: -10%;
-  width: 120%;
-  transform: rotate(5deg);
-}
 
-.map-art__road--four {
-  top: -10%;
-  left: 35%;
-  width: 120%;
-  transform: rotate(77deg);
-}
 
-.map-art__road--five {
-  top: -10%;
-  left: 72%;
-  width: 120%;
-  transform: rotate(83deg);
-}
+
+
+
 
 /* Подписи районов */
 
-.map-art__district {
-  position: absolute;
-  z-index: 3;
 
-  color: #6d716e;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  line-height: 1.35;
-  text-align: center;
-}
 
-.map-art__district--one {
-  top: 31%;
-  left: 8%;
-}
 
-.map-art__district--two {
-  top: 59%;
-  left: 37%;
-}
 
-.map-art__district--three {
-  top: 60%;
-  right: 7%;
-}
 
-.map-art__city {
-  position: absolute;
-  z-index: 3;
 
-  top: 75%;
-  left: 39%;
 
-  color: #292929;
-  font-size: 23px;
-  font-weight: 800;
-}
+
+
 
 /* =========================================
    MAP MARKERS
 ========================================= */
 
-.locations__markers {
-  position: absolute;
-  z-index: 4;
-  inset: 0;
-  pointer-events: none;
-}
 
-.map-marker {
-  position: absolute;
 
-  top: var(--marker-y);
-  left: var(--marker-x);
 
-  display: grid;
-  place-items: center;
 
-  width: 52px;
-  height: 62px;
-  padding: 0;
 
-  border: 0;
-  background: transparent;
 
-  transform: translate(-50%, -50%);
-  pointer-events: auto;
-}
 
-.map-marker img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
 
-  filter: drop-shadow(0 5px 5px rgba(30, 20, 10, 0.2));
-  transition: transform 0.2s ease;
-}
 
-.map-marker--active::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-
-  width: 76px;
-  height: 76px;
-
-  border-radius: 50%;
-  background: rgba(217, 154, 97, 0.24);
-}
-
-.map-marker:hover img {
-  transform: translateY(-5px);
-}
 
 /* =========================================
    MAP POPUP
 ========================================= */
 
-.locations__map-popup {
-  position: absolute;
-  z-index: 5;
 
-  top: 20%;
-  left: 35%;
 
-  display: grid;
-  grid-template-columns: 100px minmax(0, 1fr);
-  gap: 13px;
 
-  width: min(340px, 65%);
-  padding: 12px;
 
-  border: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: 19px;
-  background: rgba(255, 255, 255, 0.96);
 
-  box-shadow: 0 10px 35px rgba(35, 25, 15, 0.15);
-}
 
-.locations__map-popup::after {
-  content: "";
-  position: absolute;
 
-  bottom: -10px;
-  left: 38%;
 
-  width: 20px;
-  height: 20px;
 
-  background: #fff;
-  transform: rotate(45deg);
-}
 
-.map-popup__photo {
-  position: relative;
-  min-height: 105px;
-  overflow: hidden;
-  border-radius: 11px;
-  background: #302219;
-}
 
-.map-popup__photo img {
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  inset: 0;
-  object-fit: cover;
-}
 
-.map-popup__photo img.image-error {
-  display: none;
-}
 
-.map-popup__content {
-  position: relative;
-  z-index: 1;
 
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  min-width: 0;
-}
 
-.map-popup__content strong {
-  margin: 2px 0 6px;
-  color: #111;
-  font-size: 15px;
-  font-weight: 800;
-}
 
-.map-popup__content > span {
-  color: #333;
-  font-size: 13px;
-  line-height: 1.35;
-}
 
-.map-popup__content a {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
 
-  min-height: 34px;
-  margin-top: auto;
-  padding: 0 12px;
 
-  border-radius: 20px;
-  background: #111;
-
-  color: #fff;
-  font-size: 10px;
-  font-weight: 600;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-.map-popup__content a img {
-  width: 13px;
-  height: 13px;
-  filter: brightness(0) invert(1);
-}
 
 /* =========================================
    MAP CONTROLS
 ========================================= */
 
-.locations__map-zoom {
-  position: absolute;
-  z-index: 5;
 
-  top: 20px;
-  right: 18px;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 
-  width: 43px;
-  overflow: hidden;
 
-  border-radius: 22px;
-  background: #fff;
 
-  box-shadow: 0 4px 15px rgba(30, 20, 10, 0.12);
-}
-
-.locations__map-zoom button {
-  display: grid;
-  place-items: center;
-
-  width: 43px;
-  height: 42px;
-
-  border: 0;
-  background: transparent;
-
-  color: #111;
-  font-family: inherit;
-  font-size: 25px;
-  cursor: default;
-}
-
-.locations__map-zoom span {
-  width: 24px;
-  height: 1px;
-  background: #eee;
-}
 
 /* Кнопка открытия карты */
 
@@ -959,25 +652,7 @@
 
 /* Подсказка */
 
-.locations__map-note {
-  position: absolute;
-  z-index: 4;
 
-  left: 50%;
-  bottom: 18px;
-
-  padding: 8px 13px;
-  border-radius: 20px;
-
-  background: rgba(255, 255, 255, 0.8);
-  color: #777;
-
-  font-size: 11px;
-  white-space: nowrap;
-
-  transform: translateX(-50%);
-  pointer-events: none;
-}
 
 /* =========================================
    LAPTOP
@@ -1043,15 +718,9 @@
   max-height: 590px;
 }
 
-.locations__map {
-  max-height: none;
-  min-height: 590px;
-}
 
-  .locations__map-popup {
-    left: 27%;
-    width: 72%;
-  }
+
+
 }
 
 /* =========================================
@@ -1124,15 +793,9 @@
     margin-top: 12px;
   }
 
-  .locations__map {
-    min-height: 520px;
-    max-height: none;
-  }
 
-  .locations__map-popup {
-    left: 35%;
-    width: min(340px, 60%);
-  }
+
+
 }
 
 /* =========================================
@@ -1263,72 +926,31 @@
 
   /* Карта */
 
-  .locations__map {
-    min-height: 390px;
-    border-radius: 16px;
-  }
 
-  .map-art__district {
-    font-size: 9px;
-  }
 
-  .map-art__city {
-    font-size: 17px;
-  }
 
-  .map-marker {
-    width: 39px;
-    height: 48px;
-  }
 
-  .map-marker--active::before {
-    width: 58px;
-    height: 58px;
-  }
+
+
+
+
+
 
   /* Popup */
 
-  .locations__map-popup {
-    top: 18%;
-    left: 10%;
 
-    grid-template-columns: 72px minmax(0, 1fr);
-    gap: 9px;
 
-    width: 80%;
-    padding: 9px;
-    border-radius: 14px;
-  }
 
-  .map-popup__photo {
-    min-height: 83px;
-  }
 
-  .map-popup__content strong {
-    font-size: 13px;
-  }
 
-  .map-popup__content > span {
-    font-size: 11px;
-  }
 
-  .map-popup__content a {
-    min-height: 29px;
-    padding: 0 9px;
-    font-size: 9px;
-  }
 
-  .locations__map-zoom {
-    top: 12px;
-    right: 12px;
-    width: 37px;
-  }
 
-  .locations__map-zoom button {
-    width: 37px;
-    height: 36px;
-    font-size: 22px;
-  }
+
+
+
+
+
 
   .locations__map-link {
     right: 10px;
@@ -1346,9 +968,7 @@
     height: 13px;
   }
 
-  .locations__map-note {
-    display: none;
-  }
+
 }
 
 /* =========================================
@@ -1386,9 +1006,7 @@
     font-size: 10px;
   }
 
-  .locations__map {
-    min-height: 340px;
-  }
+
 }
 
 /* =========================================
@@ -1409,23 +1027,7 @@
    INTERACTIVE MAP
 ========================================= */
 
-.locations__map {
-  position: relative;
-  align-self: stretch;
 
-  width: 100%;
-  height: 100%;
-  min-width: 0;
-  min-height: 635px;
-
-  overflow: hidden;
-  border-radius: 24px;
-
-  background: #e9e8d8;
-  box-shadow: 0 8px 28px rgba(35, 25, 15, 0.06);
-
-  isolation: isolate;
-}
 
 .locations__map-canvas {
   position: absolute;
@@ -1459,25 +1061,15 @@
 }
 
 @media (max-width: 900px) {
-  .locations__map {
-    height: 520px;
-    min-height: 520px;
-  }
+
 }
 
 @media (max-width: 600px) {
-  .locations__map {
-    height: 390px;
-    min-height: 390px;
-    border-radius: 16px;
-  }
+
 }
 
 @media (max-width: 380px) {
-  .locations__map {
-    height: 340px;
-    min-height: 340px;
-  }
+
 }
 
 /* =========================================
@@ -1538,86 +1130,256 @@
    STREETCOFFE MAP MARKERS
 ========================================= */
 
-.streetcoffe-marker {
-  position: relative;
 
-  display: grid;
-  place-items: center;
 
-  width: 54px;
-  height: 64px;
-  padding: 0;
 
-  border: 0;
-  background: transparent;
 
-  cursor: pointer;
-  transform: translateY(0);
-  transition: transform 0.2s ease;
-}
 
-.streetcoffe-marker:hover {
-  transform: translateY(-5px);
-}
 
-.streetcoffe-marker__pin {
-  display: grid;
-  place-items: center;
 
-  width: 48px;
-  height: 48px;
 
-  border: 3px solid #fff;
-  border-radius: 50% 50% 50% 8px;
 
-  background: #171717;
-  color: #d99a61;
-
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-
-  transform: rotate(-45deg);
-}
-
-.streetcoffe-marker__pin svg {
-  width: 25px;
-  height: 25px;
-
-  transform: rotate(45deg);
-}
-
-.streetcoffe-marker:hover .streetcoffe-marker__pin {
-  background: #d99a61;
-  color: #171717;
-}
 
 /* =========================================
    MAP POPUP
 ========================================= */
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* =========================================
+   ACTIVE LOCATION CARD
+========================================= */
+
+.location-card.is-active {
+  border-color: #d99a61;
+  box-shadow: 0 0 0 2px rgba(217, 154, 97, 0.15);
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+@media (hover: none) {
+
+}
+
+/* Стабильное поведение списка кофеен */
+.locations__list {
+  overflow-anchor: none;
+  scroll-behavior: auto;
+}
+
+/* Не даём карточкам менять положение при наведении на телефонах */
+@media (hover: none) {
+  .location-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+/* Стабильное позиционирование Popup на мобильных */
+
+
+
+
+
+
+
+@media (max-width: 768px) {
+
+
+
+}
+
+/* =========================================
+   INTERACTIVE MAP — MAPLIBRE
+   Единый блок стилей карты без дублирующихся правил
+========================================= */
+
+.locations__map {
+  position: relative;
+  align-self: stretch;
+  isolation: isolate;
+  width: 100%;
+  height: 635px;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  border-radius: 24px;
+  background: #e9e8d8;
+  box-shadow: 0 8px 28px rgba(35, 25, 15, 0.06);
+}
+
+.locations__map-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.locations__map-canvas .maplibregl-map {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.locations__map-canvas .maplibregl-canvas {
+  display: block;
+  outline: none;
+}
+
+.locations__map-canvas .maplibregl-ctrl-bottom-right {
+  z-index: 5;
+}
+
+.locations__map-canvas .maplibregl-ctrl-group {
+  overflow: hidden;
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(30, 20, 10, 0.14);
+}
+
+/* Маркер: корневой элемент не трансформировать —
+   его положение и transform контролирует MapLibre. */
+
+.streetcoffe-marker {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 54px;
+  height: 64px;
+  padding: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  cursor: pointer;
+  transition: none;
+  will-change: transform;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.streetcoffe-marker[hidden] {
+  display: none !important;
+}
+
+.streetcoffe-marker:focus-visible .streetcoffe-marker__pin {
+  outline: 3px solid rgba(217, 154, 97, 0.55);
+  outline-offset: 4px;
+}
+
+.streetcoffe-marker__pin {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border: 3px solid #fff;
+  border-radius: 50% 50% 50% 8px;
+  background: #171717;
+  color: #d99a61;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  transform: rotate(-45deg);
+  transform-origin: center;
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.streetcoffe-marker__pin svg {
+  display: block;
+  width: 25px;
+  height: 25px;
+  transform: rotate(45deg);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .streetcoffe-marker:hover .streetcoffe-marker__pin {
+    background: #d99a61;
+    color: #171717;
+    transform: translateY(-3px) rotate(-45deg);
+  }
+}
+
+/* Popup MapLibre */
+
+.streetcoffe-map-popup {
+  z-index: 10;
+  max-width: min(340px, calc(100vw - 32px));
+}
+
 .streetcoffe-map-popup .maplibregl-popup-content {
+  position: relative;
   padding: 0;
   overflow: hidden;
-
   border-radius: 17px;
   background: #fff;
-
   box-shadow: 0 10px 35px rgba(35, 25, 15, 0.16);
 }
 
 .streetcoffe-map-popup .maplibregl-popup-close-button {
   z-index: 2;
-
   top: 7px;
   right: 7px;
-
+  display: grid;
+  place-items: center;
   width: 27px;
   height: 27px;
-
+  padding: 0;
+  border: 0;
   border-radius: 50%;
   background: #fff;
-
   color: #171717;
   font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.streetcoffe-map-popup .maplibregl-popup-close-button:hover {
+  background: #f3eee9;
 }
 
 .streetcoffe-map-popup .maplibregl-popup-tip {
@@ -1629,17 +1391,17 @@
   display: grid;
   grid-template-columns: 100px minmax(0, 1fr);
   gap: 13px;
-
+  box-sizing: border-box;
   width: 310px;
+  max-width: calc(100vw - 64px);
   padding: 12px;
 }
 
 .streetcoffe-popup__photo {
   position: relative;
-
+  min-width: 0;
   min-height: 115px;
   overflow: hidden;
-
   border-radius: 11px;
   background: #302219;
 }
@@ -1647,10 +1409,8 @@
 .streetcoffe-popup__photo img {
   position: absolute;
   inset: 0;
-
   width: 100%;
   height: 100%;
-
   object-fit: cover;
 }
 
@@ -1667,16 +1427,15 @@
 
 .streetcoffe-popup__title {
   margin: 2px 0 7px;
-
   color: #111;
   font-size: 15px;
   font-weight: 800;
+  line-height: 1.25;
 }
 
 .streetcoffe-popup__address,
 .streetcoffe-popup__hours {
-  margin-bottom: 6px;
-
+  margin: 0 0 6px;
   color: #555;
   font-size: 12px;
   line-height: 1.4;
@@ -1686,20 +1445,18 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-
   min-height: 32px;
   margin-top: auto;
   padding: 0 12px;
-
   border-radius: 20px;
   background: #171717;
-
   color: #fff;
   font-size: 10px;
   font-weight: 600;
   text-decoration: none;
-
-  transition: background 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .streetcoffe-popup__route:hover {
@@ -1707,29 +1464,30 @@
   color: #171717;
 }
 
-/* =========================================
-   ACTIVE LOCATION CARD
-========================================= */
+/* Выбранная кофейня в списке */
 
 .location-card.is-active {
   border-color: #d99a61;
   box-shadow: 0 0 0 2px rgba(217, 154, 97, 0.15);
 }
 
-/* =========================================
-   MOBILE
-========================================= */
+/* Планшеты */
+
+@media (max-width: 900px) {
+  .locations__map {
+    height: 520px;
+    min-height: 520px;
+    border-radius: 20px;
+  }
+}
+
+/* Телефоны */
 
 @media (max-width: 600px) {
-  .streetcoffe-popup {
-    grid-template-columns: 75px minmax(0, 1fr);
-    width: 270px;
-    gap: 10px;
-    padding: 10px;
-  }
-
-  .streetcoffe-popup__photo {
-    min-height: 95px;
+  .locations__map {
+    height: 390px;
+    min-height: 390px;
+    border-radius: 16px;
   }
 
   .streetcoffe-marker {
@@ -1746,4 +1504,55 @@
     width: 21px;
     height: 21px;
   }
+
+  .streetcoffe-popup {
+    grid-template-columns: 75px minmax(0, 1fr);
+    width: 270px;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .streetcoffe-popup__photo {
+    min-height: 95px;
+  }
+}
+
+/* Очень узкие экраны */
+
+@media (max-width: 380px) {
+  .locations__map {
+    height: 340px;
+    min-height: 340px;
+  }
+
+  .streetcoffe-popup {
+    grid-template-columns: 68px minmax(0, 1fr);
+    width: 250px;
+    gap: 8px;
+    padding: 9px;
+  }
+
+  .streetcoffe-popup__photo {
+    min-height: 88px;
+  }
+}
+
+/* На сенсорных экранах hover не должен двигать маркеры */
+
+@media (hover: none) {
+  .location-card:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .streetcoffe-marker:hover .streetcoffe-marker__pin {
+    transform: rotate(-45deg);
+    background: #171717;
+    color: #d99a61;
+  }
+}
+
+.locations__list {
+  overflow-anchor: none;
+  scroll-behavior: auto;
 }
