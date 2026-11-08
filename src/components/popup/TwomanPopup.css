@@ -1,0 +1,208 @@
+.twoman-popup,.twoman-popup *{box-sizing:border-box}
+.twoman-popup{--ink:#211912;--brown:#6f5038;--muted:#887b6d;--paper:#f4eee6;--light:#fbf8f3;--gold:#c49a6c;position:fixed;z-index:99999;inset:0;display:grid;place-items:center;padding:24px;visibility:hidden;opacity:0;pointer-events:none;transition:opacity .35s ease,visibility .35s ease}
+.twoman-popup.is-visible{visibility:visible;opacity:1;pointer-events:auto}
+.twoman-popup__backdrop{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;background:rgba(20,16,12,.68);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.twoman-popup__dialog{position:relative;z-index:1;display:grid;grid-template-columns:minmax(220px,.82fr) minmax(0,1.18fr);width:min(900px,100%);min-height:490px;max-height:min(680px,calc(100dvh - 48px));overflow:hidden;border:1px solid rgba(255,255,255,.5);border-radius:25px;background:var(--light);color:var(--ink);box-shadow:0 35px 100px rgba(0,0,0,.32),0 5px 18px rgba(0,0,0,.12);transform:translateY(22px) scale(.98);transition:transform .4s cubic-bezier(.2,.75,.25,1)}
+.twoman-popup.is-visible .twoman-popup__dialog{transform:translateY(0) scale(1)}
+.twoman-popup__close{position:absolute;z-index:5;top:17px;right:17px;display:grid;place-items:center;width:39px;height:39px;padding:0;border:1px solid rgba(76,57,39,.18);border-radius:50%;background:rgba(251,248,243,.82);cursor:pointer;transition:background .2s,transform .2s}
+.twoman-popup__close:hover{background:#e9ddcf;transform:rotate(90deg)}
+.twoman-popup__close span{position:absolute;width:15px;height:1.5px;border-radius:2px;background:var(--ink)}
+.twoman-popup__close span:first-child{transform:rotate(45deg)}.twoman-popup__close span:last-child{transform:rotate(-45deg)}
+.twoman-popup__visual{position:relative;isolation:isolate;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100%;overflow:hidden;padding:35px 25px;background:radial-gradient(ellipse at 50% 45%,rgba(205,169,128,.18),transparent 52%),linear-gradient(145deg,#302319,#211912 52%,#130f0c);color:#ead6bd}
+.twoman-popup__rings,.twoman-popup__rings:before{position:absolute;z-index:-1;content:"";width:390px;aspect-ratio:1;border:1px solid rgba(218,187,151,.19);border-radius:50%;transform:rotate(-24deg) scaleY(.65)}
+.twoman-popup__rings:before{display:block;width:290px;left:49px;top:49px;transform:rotate(58deg) scaleY(.8)}
+.twoman-popup__logo{display:block;width:clamp(115px,14vw,160px);height:clamp(145px,18vw,190px);object-fit:contain;filter:drop-shadow(0 5px 20px rgba(0,0,0,.3))}
+.twoman-popup__visual-caption{margin-top:25px;color:rgba(235,215,191,.8);font-size:9px;font-weight:600;letter-spacing:.28em;text-align:center}
+.twoman-popup__content{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;min-width:0;padding:55px clamp(30px,5vw,62px) 42px}
+.twoman-popup__brand{display:flex;align-items:baseline;gap:9px;margin-bottom:39px;color:var(--ink)}
+.twoman-popup__brand-name{font-family:Georgia,"Times New Roman",serif;font-size:22px;letter-spacing:.13em}
+.twoman-popup__brand-studio{color:var(--muted);font-size:8px;font-weight:650;letter-spacing:.22em}
+.twoman-popup__eyebrow{margin:0 0 15px;color:#a77c54;font-size:9px;font-weight:750;letter-spacing:.16em;line-height:1.6}
+.twoman-popup__content h2{margin:0;color:var(--ink);font-family:inherit;font-size:clamp(34px,4vw,49px);font-weight:750;letter-spacing:-.055em;line-height:1.08}
+.twoman-popup__content h2 span{color:#b88659;font-family:Georgia,"Times New Roman",serif;font-weight:400;font-style:italic;letter-spacing:-.045em}
+.twoman-popup__description{max-width:410px;margin:20px 0 27px;color:#75695e;font-size:14px;line-height:1.75}
+.twoman-popup__actions{display:flex;flex-wrap:wrap;gap:10px;width:100%}
+.twoman-popup__button{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:49px;padding:0 17px;border:1px solid transparent;border-radius:999px;font-size:12px;font-weight:650;text-decoration:none;transition:color .2s,background .2s,border-color .2s,transform .2s}
+.twoman-popup__button:hover{transform:translateY(-2px)}
+.twoman-popup__button--primary{flex:1 1 190px;background:#241b14;color:#fffaf3}
+.twoman-popup__button--primary:hover{background:#493421}
+.twoman-popup__button--primary svg{width:17px;height:17px;fill:currentColor}
+.twoman-popup__button--secondary{flex:1 1 145px;border-color:rgba(111,80,56,.35);background:transparent;color:var(--brown)}
+.twoman-popup__button--secondary:hover{border-color:var(--brown);background:#f0e7dc}
+.twoman-popup__button span{font-size:17px;line-height:1}
+.twoman-popup__note{display:flex;align-items:center;gap:11px;width:100%;margin-top:33px;color:#a29688;font-size:8px;font-weight:650;letter-spacing:.2em;white-space:nowrap}
+.twoman-popup__note i{flex:1;height:1px;background:rgba(111,80,56,.18)}
+body.twoman-popup-open{overflow:hidden}
+@media(max-width:760px){.twoman-popup{padding:16px}.twoman-popup__dialog{grid-template-columns:1fr;width:min(510px,100%);min-height:0;max-height:calc(100dvh - 32px);overflow-y:auto;border-radius:21px}.twoman-popup__visual{min-height:145px;padding:17px}.twoman-popup__logo{width:70px;height:83px}.twoman-popup__visual-caption{margin-top:9px;font-size:7px}.twoman-popup__content{padding:26px 28px 27px}.twoman-popup__brand{margin-bottom:22px}.twoman-popup__content h2{font-size:clamp(32px,8vw,43px)}.twoman-popup__description{margin:14px 0 21px;font-size:13px}.twoman-popup__note{margin-top:22px}.twoman-popup__close{top:12px;right:12px;width:35px;height:35px}}
+@media(max-width:420px){.twoman-popup{padding:10px}.twoman-popup__dialog{max-height:calc(100dvh - 20px);border-radius:18px}.twoman-popup__visual{min-height:112px;padding:10px}.twoman-popup__logo{width:52px;height:62px}.twoman-popup__visual-caption{margin-top:6px;font-size:6px}.twoman-popup__content{padding:21px 20px 22px}.twoman-popup__brand{margin-bottom:17px}.twoman-popup__brand-name{font-size:18px}.twoman-popup__eyebrow{font-size:8px}.twoman-popup__content h2{font-size:33px}.twoman-popup__description{font-size:12px;line-height:1.65}.twoman-popup__actions{flex-direction:column}.twoman-popup__button{width:100%;min-height:46px}.twoman-popup__note{gap:7px;font-size:7px;letter-spacing:.13em}}
+@media(prefers-reduced-motion:reduce){.twoman-popup,.twoman-popup *{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+
+/* TWOMAN — единый логотип с обязательной двойкой */
+
+.twoman-popup__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 39px;
+  color: var(--ink);
+}
+
+.twoman-popup__brand-mark {
+  display: inline-block;
+  color: #17120e;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 31px;
+  font-weight: 700;
+  line-height: 0.85;
+  letter-spacing: -0.12em;
+  margin-right: 3px;
+}
+
+.twoman-popup__brand-name {
+  color: #211912;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  line-height: 1;
+}
+
+.twoman-popup__brand-studio {
+  align-self: center;
+  margin-left: 2px;
+  color: #887b6d;
+  font-size: 8px;
+  font-weight: 650;
+  letter-spacing: 0.22em;
+}
+
+/* Стрелка из public/icons/arrow.svg */
+
+.twoman-popup__arrow {
+  display: block;
+  width: 17px;
+  height: 17px;
+  flex: 0 0 17px;
+  object-fit: contain;
+  transition: transform 0.25s ease;
+}
+
+/* Белая стрелка на тёмной кнопке */
+
+.twoman-popup__button--primary .twoman-popup__arrow {
+  filter: brightness(0) invert(1);
+}
+
+/* Тёмная стрелка на светлой кнопке */
+
+.twoman-popup__button--secondary .twoman-popup__arrow {
+  filter: brightness(0);
+}
+
+/* Небольшое движение стрелки при наведении */
+
+.twoman-popup__button:hover .twoman-popup__arrow {
+  transform: translateX(4px);
+}
+
+/* Мобильная версия */
+
+@media (max-width: 760px) {
+  .twoman-popup__brand {
+    margin-bottom: 22px;
+  }
+
+  .twoman-popup__brand-mark {
+    font-size: 27px;
+  }
+
+  .twoman-popup__brand-name {
+    font-size: 19px;
+  }
+}
+
+/* =========================================
+   TWOMAN — TYPOGRAPHY REFINEMENT
+========================================= */
+
+/* Основной заголовок */
+.twoman-popup__content h2 {
+  font-weight: 500;
+  letter-spacing: -0.045em;
+  line-height: 1.08;
+}
+
+/* Акцентная строка заголовка */
+.twoman-popup__content h2 span {
+  font-weight: 400;
+  letter-spacing: -0.055em;
+}
+
+/* Описание */
+.twoman-popup__description {
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: -0.01em;
+}
+
+/* Верхняя подпись */
+.twoman-popup__eyebrow {
+  font-weight: 600;
+  letter-spacing: 0.16em;
+}
+
+/* Название бренда */
+.twoman-popup__brand-name {
+  font-weight: 500;
+  letter-spacing: 0.12em;
+}
+
+/* Кнопки */
+.twoman-popup__button {
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+
+/* Логотип в левой части */
+.twoman-popup__logo {
+  width: 128px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Подпись под логотипом */
+.twoman-popup__visual-caption {
+  font-weight: 500;
+  letter-spacing: 0.22em;
+}
+
+/* Мобильная версия */
+@media (max-width: 760px) {
+  .twoman-popup__content h2 {
+    font-size: clamp(30px, 8vw, 40px);
+    line-height: 1.1;
+  }
+
+  .twoman-popup__logo {
+    width: 96px;
+  }
+}
+
+.twoman-popup__brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.twoman-popup__brand-mark {
+  display: block;
+  width: 15px;
+  height: 24px;
+  flex: 0 0 auto;
+  object-fit: contain;
+}
+
+.twoman-popup__brand-name {
+  font-weight: 500;
+  letter-spacing: 0.12em;
+}
