@@ -1035,3 +1035,198 @@
   display: none !important;
   content: none !important;
 }
+
+/* =========================================
+   BRAND LOGO — STREET COFFEE
+========================================= */
+
+.footer__brand {
+  min-width: 0;
+}
+
+.footer__brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  width: fit-content;
+  max-width: 100%;
+
+  color: #fff;
+  text-decoration: none;
+}
+
+/* Эмблема */
+
+.footer__brand-emblem {
+  display: block;
+
+  width: clamp(105px, 8.5vw, 145px);
+  height: auto;
+
+  flex: 0 0 auto;
+
+  object-fit: contain;
+  object-position: center;
+}
+
+/* Текстовая часть */
+
+.footer__brand-wordmark {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  min-width: 0;
+}
+
+/* STREET COFFEE */
+
+.footer__brand-name {
+  color: #fff;
+
+  font-family: inherit;
+  font-size: clamp(29px, 2.2vw, 43px);
+  font-weight: 500;
+
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+}
+
+/* СЕТЬ КОФЕЕН В ТОЛЬЯТТИ */
+
+.footer__brand-caption {
+  display: block;
+
+  margin-top: 12px;
+
+  color: rgba(255, 255, 255, 0.78);
+
+  font-size: 11px;
+  font-weight: 400;
+
+  line-height: 1.5;
+  letter-spacing: 0.32em;
+}
+
+/* Рукописный слоган */
+
+.footer__handwriting {
+  margin: 30px 0 17px;
+
+  color: #d99a61;
+  font-family: "Caveat", "Segoe Print", cursive;
+  font-size: clamp(32px, 2.7vw, 43px);
+  font-weight: 400;
+
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+
+  transform: rotate(-7deg);
+  transform-origin: left center;
+}
+
+.footer__handwriting span {
+  display: inline-block;
+  font-family: sans-serif;
+  font-size: 1.1em;
+  transform: rotate(10deg);
+}
+
+/* =========================================
+   BRAND RESPONSIVE
+========================================= */
+
+/* Ноутбуки */
+
+@media (max-width: 1300px) {
+  .footer__brand-logo {
+    gap: 15px;
+  }
+
+  .footer__brand-emblem {
+    width: 105px;
+  }
+
+  .footer__brand-name {
+    font-size: 31px;
+  }
+
+  .footer__brand-caption {
+    font-size: 9px;
+    letter-spacing: 0.25em;
+  }
+}
+
+/* Планшеты */
+
+@media (max-width: 1000px) {
+  .footer__brand-logo {
+    gap: 14px;
+  }
+
+  .footer__brand-emblem {
+    width: 95px;
+  }
+
+  .footer__brand-name {
+    font-size: 29px;
+  }
+
+  .footer__brand-caption {
+    font-size: 9px;
+    letter-spacing: 0.2em;
+  }
+
+  .footer__handwriting {
+    margin-top: 25px;
+  }
+}
+
+/* Мобильные */
+
+@media (max-width: 650px) {
+  .footer__brand-logo {
+    gap: 16px;
+  }
+
+  .footer__brand-emblem {
+    width: 100px;
+  }
+
+  .footer__brand-name {
+    font-size: 32px;
+  }
+
+  .footer__brand-caption {
+    margin-top: 9px;
+    font-size: 9px;
+    letter-spacing: 0.23em;
+  }
+
+  .footer__handwriting {
+    margin-top: 25px;
+    font-size: 35px;
+  }
+}
+
+/* Очень узкие экраны */
+
+@media (max-width: 380px) {
+  .footer__brand-logo {
+    gap: 12px;
+  }
+
+  .footer__brand-emblem {
+    width: 85px;
+  }
+
+  .footer__brand-name {
+    font-size: 27px;
+  }
+
+  .footer__brand-caption {
+    font-size: 8px;
+    letter-spacing: 0.18em;
+  }
+}

@@ -24,48 +24,51 @@
 
 .blog__decor {
   position: absolute;
-  z-index: -1;
-  top: -130px;
-  right: -7%;
-  width: 58%;
-  height: 600px;
-  pointer-events: none;
-}
-
-.blog__stamp {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: min(75%, 590px);
-  height: auto;
-  opacity: 0.09;
-  object-fit: contain;
-}
-
-.blog__bean {
-  position: absolute;
   z-index: 1;
-  right: 17%;
-  bottom: -5px;
-  width: min(42%, 390px);
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 15px 20px rgba(50, 25, 10, 0.12));
+  top: -65px;
+  right: 0;
+  width: 65%;
+  height: 520px;
+  pointer-events: none;
+  overflow: visible;
 }
 
-/* Если изображение ещё не добавлено */
-.blog__bean:not([src]),
-.blog__stamp:not([src]),
+/* Кофейные зёрна и дорожка */
+
+.blog__closeup {
+  position: absolute;
+  display: block;
+
+  /* Главное ограничение размера */
+  width: min(58%, 760px);
+  max-width: 760px;
+  max-height: 410px;
+  height: auto;
+
+  right: -1%;
+  bottom: 0;
+
+  object-fit: contain;
+  object-position: right bottom;
+
+  filter: drop-shadow(0 10px 15px rgba(50, 25, 10, 0.08));
+}
+
+/* Если изображение не загружено */
+
+.blog__closeup:not([src]),
 .blog__decor-arrow:not([src]) {
   display: none;
 }
 
+/* Декоративная стрелка */
+
 .blog__decor-arrow {
   position: absolute;
   z-index: 2;
-  top: 55%;
-  left: 0;
-  width: 95px;
+  top: 65%;
+  left: 3%;
+  width: 75px;
   height: auto;
   object-fit: contain;
   transform: rotate(-8deg);
@@ -77,9 +80,12 @@
 
 .blog__header {
   position: relative;
+  z-index: 2;
+
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+
   min-height: 435px;
   padding: 0 2%;
 }
@@ -324,6 +330,18 @@
     width: 94%;
   }
 
+  .blog__decor {
+    top: -65px;
+    right: 0;
+    width: 62%;
+    height: 470px;
+  }
+
+  .blog__closeup {
+    width: min(65%, 620px);
+    max-height: 350px;
+  }
+
   .blog__header {
     min-height: 390px;
   }
@@ -339,11 +357,6 @@
   .blog__description {
     max-width: 570px;
     font-size: 19px;
-  }
-
-  .blog__decor {
-    right: -9%;
-    width: 58%;
   }
 
   .blog__handwriting {
@@ -422,10 +435,18 @@
   }
 
   .blog__decor {
-    top: -50px;
-    right: -15%;
-    width: 60%;
-    opacity: 0.75;
+    top: 5px;
+    right: -2%;
+    width: 58%;
+    height: 390px;
+  }
+
+  .blog__closeup {
+    right: 0;
+    bottom: 0;
+    width: min(75%, 440px);
+    max-height: 290px;
+    opacity: 0.9;
   }
 
   .blog__handwriting {
@@ -452,6 +473,10 @@
     max-width: 320px;
     font-size: 15px;
   }
+
+  .blog__header {
+  padding-bottom: 12px;
+}
 }
 
 /* =========================================
@@ -469,7 +494,7 @@
 
   .blog__header {
     min-height: auto;
-    padding-bottom: 38px;
+    padding-bottom: 205px;
   }
 
   .blog__eyebrow {
@@ -496,27 +521,9 @@
     display: none;
   }
 
-  .blog__decor {
-    top: 35px;
-    right: -35%;
-    width: 85%;
-    height: 360px;
-    opacity: 0.35;
-  }
-
-  .blog__stamp {
-    width: 80%;
-  }
-
-  .blog__bean {
-    right: 15%;
-    bottom: 0;
-    width: 38%;
-  }
-
-  .blog__decor-arrow {
-    display: none;
-  }
+  .blog__header {
+  padding-bottom: 24px;
+}
 
   /* Карточки */
 
@@ -595,6 +602,20 @@
     font-size: 38px;
   }
 
+  .blog__header {
+    padding-bottom: 175px;
+  }
+
+  .blog__decor {
+    bottom: 135px;
+    height: 165px;
+  }
+
+  .blog__closeup {
+    width: min(78%, 270px);
+    max-height: 155px;
+  }
+
   .blog-card {
     grid-template-columns: 52px minmax(0, 1fr) 37px;
     gap: 10px;
@@ -624,6 +645,10 @@
     height: 36px;
     font-size: 26px;
   }
+
+    .blog__header {
+  padding-bottom: 24px;
+}
 }
 
 /* =========================================
@@ -637,5 +662,31 @@
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
+  }
+}
+
+/* =========================================
+   HIDE COFFEE DECORATIONS ON TABLET & MOBILE
+========================================= */
+
+@media (max-width: 900px) {
+  .blog__decor {
+    display: none !important;
+  }
+}
+
+/* =========================================
+   TABLET SPACING FIX — 601–900px
+========================================= */
+
+@media (min-width: 601px) and (max-width: 900px) {
+  .blog__header {
+    min-height: auto;
+    height: auto;
+    padding-bottom: 28px;
+  }
+
+  .blog__categories {
+    margin-top: 0;
   }
 }

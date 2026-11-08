@@ -84,42 +84,58 @@ const currentYear = new Date().getFullYear();
     <div class="footer__container">
 
       <!-- BRAND -->
-      <div class="footer__brand">
+        <div class="footer__brand">
 
-        <a href="/" class="footer__brand-logo" aria-label="StreetCoffe — главная">
-          <img
-            src="/header/logo.png"
-            alt="StreetCoffe"
-            loading="lazy"
-          />
-        </a>
+          <a href="/" class="footer__brand-logo" aria-label="StreetCoffe — главная">
 
-        <p class="footer__handwriting">
-          Больше<br />
-          чем кофе <span>♡</span>
-        </p>
+            <img
+              class="footer__brand-emblem"
+              src="/header/logo.png"
+              alt="Эмблема StreetCoffe"
+              loading="lazy"
+            />
 
-        <p class="footer__brand-description">
-          Любимые напитки, яркие вкусы<br class="desktop-only" />
-          и уютная атмосфера рядом.<br />
-          StreetCoffe — всегда с тобой.
-        </p>
+            <span class="footer__brand-wordmark">
+              <span class="footer__brand-name">
+                STREET<br />
+                COFFEE
+              </span>
 
-        <div class="footer__socials" aria-label="Социальные сети">
-          {socials.map((social) => (
-            <a
-              class="footer__social"
-              href={social.href || "#"}
-              aria-label={social.name}
-              target={social.href ? "_blank" : undefined}
-              rel={social.href ? "noopener noreferrer" : undefined}
-              aria-disabled={!social.href ? "true" : undefined}
-            >
-              <img src={social.icon} alt="" loading="lazy" />
-            </a>
-          ))}
-        </div>
-      </div>
+              <span class="footer__brand-caption">
+                СЕТЬ КОФЕЕН<br />
+                В ТОЛЬЯТТИ
+              </span>
+            </span>
+
+          </a>
+
+          <p class="footer__handwriting">
+            Больше<br />
+            чем кофе <span>♡</span>
+          </p>
+
+          <p class="footer__brand-description">
+            Любимые напитки, яркие вкусы<br class="desktop-only" />
+            и уютная атмосфера рядом.<br />
+            StreetCoffe — всегда с тобой.
+          </p>
+
+          <div class="footer__socials" aria-label="Социальные сети">
+            {socials.map((social) => (
+              <a
+                class="footer__social"
+                href={social.href || "#"}
+                aria-label={social.name}
+                target={social.href ? "_blank" : undefined}
+                rel={social.href ? "noopener noreferrer" : undefined}
+                aria-disabled={!social.href ? "true" : undefined}
+              >
+                <img src={social.icon} alt="" loading="lazy" />
+              </a>
+            ))}
+          </div>
+
+</div>
 
       <!-- NAVIGATION -->
       <nav class="footer__column footer__navigation" aria-label="Навигация">

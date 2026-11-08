@@ -7,28 +7,28 @@ const blogCategories = [
     title: "Всё о кофе",
     description: "Сорта, способы приготовления и интересные факты о кофе",
     icon: "/icons/cuppCoffe_black.svg",
-    href: "/coffee",
+    href: "/coffee/",
   },
   {
     id: "bubble-tea",
     title: "Мир Bubble Tea",
     description: "Вкусы, топпинги и почему его все любят",
     icon: "/icons/category-bubble-tea.svg",
-    href: "/bubble-tea",
+    href: "/bubble-tea/",
   },
   {
     id: "locations",
     title: "Наши кофейни",
     description: "Адреса, атмосфера и особенности каждой точки в Тольятти",
     icon: "/icons/why-location.svg",
-    href: "/locations",
+    href: "/locations/",
   },
   {
     id: "life",
     title: "Жизнь StreetCoffe",
     description: "Новости, сезонные напитки и истории нашей команды",
     icon: "/icons/promo-heart_black.svg",
-    href: "/streetcoffe-life",
+    href: "/streetcoffe-life/",
   },
 ];
 ---
@@ -38,16 +38,13 @@ const blogCategories = [
 
     <!-- Декоративный фон -->
     <div class="blog__decor" aria-hidden="true">
-      <img
-        class="blog__stamp"
-        src="/images/blog/streetcoffe-stamp.svg"
-        alt=""
-      />
 
       <img
-        class="blog__bean"
-        src="/images/blog/coffee-bean.png"
+        class="blog__closeup"
+        src="/blog/closeup-bean.webp"
         alt=""
+        fetchpriority="high"
+        decoding="async"
       />
 
       <img
@@ -55,6 +52,7 @@ const blogCategories = [
         src="/icons/hand-drawn-arrow.svg"
         alt=""
       />
+
     </div>
 
     <!-- Заголовок -->
