@@ -94,17 +94,6 @@ const questions = [
     <!-- Основная часть -->
     <div class="faq__body">
 
-      <!-- Изображение напитка -->
-      <div class="faq__visual">
-        <img
-          class="faq__drink"
-          src="/FAQ/faq-drink.webp"
-          alt="Холодный кофейный напиток StreetCoffe"
-          loading="lazy"
-          decoding="async"
-        />
-      </div>
-
       <!-- Список вопросов -->
       <div class="faq__list">
         {questions.map((item, index) => (
@@ -130,10 +119,16 @@ const questions = [
             <div class="faq-item__answer">
               <p>{item.answer}</p>
 
-              <a href={item.link} class="faq-item__link">
-                {item.linkText}
-                <span aria-hidden="true">↗</span>
-              </a>
+            <a href={item.link} class="faq-item__link">
+              {item.linkText}
+              <img
+                class="faq-item__link-icon"
+                src="/icons/arrow.svg"
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+              />
+            </a>
             </div>
           </details>
         ))}

@@ -19,32 +19,32 @@ const socials = [
   {
     name: "VK",
     icon: "/icons/vk.svg",
-    href: "",
+    href: "https://vk.com/ТВОЯ_СТРАНИЦА",
   },
   {
     name: "Telegram",
     icon: "/icons/telegram.svg",
-    href: "",
+    href: "https://t.me/ТВОЙ_КАНАЛ",
   },
   {
     name: "Instagram",
     icon: "/icons/instagram.svg",
-    href: "",
+    href: "https://www.instagram.com/ТВОЙ_АККАУНТ/",
   },
   {
     name: "YouTube",
     icon: "/icons/youtube.svg",
-    href: "",
+    href: "https://www.youtube.com/@ТВОЙ_КАНАЛ",
   },
 ];
 
 const navigation = [
   { label: "Главная", href: "/" },
-  { label: "Меню", href: "/menu/" },
+  { label: "Меню", href: "/#categories" },
+  { label: "О нас", href: "/#why" },
   { label: "Наши кофейни", href: "/#locations" },
-  { label: "Статьи", href: "/articles/" },
-  { label: "О нас", href: "/#about" },
-  { label: "Контакты", href: "/#contacts" },
+  { label: "Статьи", href: "/#blog" },
+  { label: "Частые вопросы", href: "/#faq" },
 ];
 
 const locations = [
@@ -63,23 +63,6 @@ const currentYear = new Date().getFullYear();
 
 <footer class="footer" id="contacts">
   <div class="footer__main">
-
-    <!-- Декоративные элементы -->
-    <div class="footer__decor" aria-hidden="true">
-      <img
-        class="footer__stamp"
-        src="/images/home/footer-stamp.webp"
-        alt=""
-        loading="lazy"
-      />
-
-      <img
-        class="footer__cup"
-        src="/images/home/footer-cup.webp"
-        alt=""
-        loading="lazy"
-      />
-    </div>
 
     <div class="footer__container">
 
@@ -233,19 +216,18 @@ const currentYear = new Date().getFullYear();
         <a href="/agreement/">Пользовательское соглашение</a>
       </div>
 
-      <p class="footer__made">
-        <span class="footer__made-icon">♧</span>
-        Сделано с <span class="footer__heart">♡</span> в Тольятти
-      </p>
+        <p class="footer__made">
+         <a href="https://twomanstudio.ru"> Разработано <span class="footer__studio">TwoMan Studio</span></a>
+        </p>
 
-      <button
-        class="footer__to-top"
-        type="button"
-        aria-label="Вернуться наверх"
-        onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
-      >
-        <span aria-hidden="true">⌃</span>
-      </button>
+        <button
+          class="footer__to-top"
+          type="button"
+          aria-label="Вернуться наверх"
+          onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+        >
+          <img src="/icons/up.svg" alt="" />
+        </button>
 
     </div>
   </div>
