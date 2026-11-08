@@ -2,14 +2,13 @@
 import "./MenuCatalog.css";
 import { products, categoryLabels, getCatalogPrice } from "../../data/products";
 
-const serializedProducts = JSON.stringify(products);
 const filters = [
-  { id: "all", label: "Все напитки", icon: "▦" },
-  { id: "coffee", label: "Кофе", icon: "♨" },
-  { id: "bubble-tea", label: "Bubble Tea", icon: "◉" },
-  { id: "cold", label: "Холодные напитки", icon: "❄" },
-  { id: "tea", label: "Чай", icon: "♧" },
-  { id: "other", label: "Другое", icon: "•••" },
+  { id: "all", label: "Все напитки", icon: "/icons/grid.svg" },
+  { id: "coffee", label: "Кофе", icon: "/icons/coffee.svg" },
+  { id: "bubble-tea", label: "Bubble Tea", icon: "/icons/bubble-tea.svg" },
+  { id: "cold", label: "Холодные напитки", icon: "/icons/category-cold.svg" },
+  { id: "tea", label: "Чай", icon: "/icons/tea.svg" },
+  { id: "other", label: "Другое", icon: "/icons/more.svg" },
 ];
 
 const initialProducts = products.map((product) => ({
@@ -29,12 +28,9 @@ const initialProducts = products.map((product) => ({
 ---
 
 <section class="menu-page">
-  <div class="menu-page__decor menu-page__decor--beans" aria-hidden="true"></div>
-  <div class="menu-page__decor menu-page__decor--leaf" aria-hidden="true"></div>
-
   <div class="menu-container">
     <nav class="menu-breadcrumbs" aria-label="Хлебные крошки">
-      <a href="/">Главная</a><span>›</span><span aria-current="page">Меню</span>
+      <a href="/">Главная</a><span aria-hidden="true">›</span><span aria-current="page">Меню</span>
     </nav>
 
     <header class="menu-heading">
@@ -58,7 +54,7 @@ const initialProducts = products.map((product) => ({
             data-filter={filter.id}
             aria-pressed={index === 0 ? "true" : "false"}
           >
-            <span class="menu-filter__icon" aria-hidden="true">{filter.icon}</span>
+            <img class="menu-filter__icon" src={filter.icon} alt="" aria-hidden="true" />
             <span>{filter.label}</span>
           </button>
         ))}
@@ -77,9 +73,17 @@ const initialProducts = products.map((product) => ({
           <p id="menu-results-count" aria-live="polite"></p>
           <button id="menu-reset" class="menu-reset" type="button">Сбросить фильтры</button>
         </div>
+
         <div class="product-grid" id="product-grid"></div>
+
+        <nav class="menu-pagination" id="menu-pagination" aria-label="Страницы каталога">
+          <button class="menu-pagination__arrow" id="page-prev" type="button" aria-label="Предыдущая страница">‹</button>
+          <div class="menu-pagination__pages" id="page-numbers"></div>
+          <button class="menu-pagination__arrow" id="page-next" type="button" aria-label="Следующая страница">›</button>
+        </nav>
+
         <div class="menu-empty" id="menu-empty" hidden>
-          <span class="menu-empty__icon">⌕</span>
+          <span class="menu-empty__icon" aria-hidden="true">⌕</span>
           <h2>Ничего не нашлось</h2>
           <p>Попробуй изменить запрос или выбрать другую категорию.</p>
           <button type="button" id="menu-empty-reset">Показать все напитки</button>
@@ -87,7 +91,14 @@ const initialProducts = products.map((product) => ({
       </section>
 
       <aside class="product-detail" id="product-detail" aria-label="Информация о выбранном напитке">
-        <button class="product-detail__close" id="detail-close" type="button" aria-label="Закрыть подробности">×</button>
+      <button
+      class="product-detail__close"
+      id="detail-close"
+      type="button"
+      aria-label="Закрыть подробности"
+    >
+      &times;
+    </button>
         <div class="product-detail__visual" id="detail-visual">
           <div class="product-detail__visual-copy">
             <span class="product-detail__category" id="detail-category"></span>
@@ -144,12 +155,21 @@ const initialProducts = products.map((product) => ({
   const resultCount = document.querySelector<HTMLElement>("#menu-results-count");
   const emptyState = document.querySelector<HTMLElement>("#menu-empty");
   const detail = document.querySelector<HTMLElement>("#product-detail");
+  const closeDetailButton =
+  document.querySelector<HTMLButtonElement>("#detail-close");
+  const pagination = document.querySelector<HTMLElement>("#menu-pagination");
+  const pageNumbers = document.querySelector<HTMLElement>("#page-numbers");
+  const prevButton = document.querySelector<HTMLButtonElement>("#page-prev");
+  const nextButton = document.querySelector<HTMLButtonElement>("#page-next");
 
-  if (dataNode && grid && searchInput && clearSearch && resultCount && emptyState && detail) {
-    const products = JSON.parse(dataNode.textContent || "[]") as CatalogProduct[];
+        if (dataNode && grid && searchInput && clearSearch && resultCount && emptyState && detail && closeDetailButton && pagination && pageNumbers && prevButton && nextButton) {    const products = JSON.parse(dataNode.textContent || "[]") as CatalogProduct[];
+    const pageSize = 8;
+    const mobileQuery = window.matchMedia("(max-width: 850px)");
     let activeFilter = "all";
+    let currentPage = 1;
     let selectedId: string | null = products[0]?.id ?? null;
     let selectedSizeIndex = 0;
+    let detailWasOpenedByUser = false;
 
     const escapeHtml = (value: string) =>
       value.replace(/[&<>"']/g, (char) => ({
@@ -158,6 +178,14 @@ const initialProducts = products.map((product) => ({
 
     const formatPrice = (price: number) =>
       `${new Intl.NumberFormat("ru-RU").format(price)} ₽`;
+
+    const pluralProducts = (count: number) => {
+      const mod10 = count % 10;
+      const mod100 = count % 100;
+      if (mod10 === 1 && mod100 !== 11) return "напиток";
+      if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14)) return "напитка";
+      return "напитков";
+    };
 
     const productImage = (product: CatalogProduct, className: string) => {
       if (product.image) {
@@ -172,29 +200,50 @@ const initialProducts = products.map((product) => ({
     const matchesFilter = (product: CatalogProduct) => {
       if (activeFilter === "all") return true;
       if (activeFilter === "other") return product.category === "hot" || product.category === "milkshakes" || product.category === "other";
-      if (activeFilter === "bubble-tea") return product.category === "bubble-tea";
       return product.category === activeFilter;
     };
 
     const visibleProducts = () => {
       const query = searchInput.value.trim().toLocaleLowerCase("ru");
       return products.filter((product) => {
-        const searchable = [
-          product.name,
-          product.categoryLabel,
-          ...product.tags,
-        ].join(" ").toLocaleLowerCase("ru");
+        const searchable = [product.name, product.categoryLabel, ...product.tags]
+          .join(" ").toLocaleLowerCase("ru");
         return matchesFilter(product) && (!query || searchable.includes(query));
+      });
+    };
+
+    const renderPagination = (totalPages: number) => {
+      pagination.hidden = totalPages <= 1;
+      pageNumbers.innerHTML = Array.from({ length: totalPages }, (_, index) => {
+        const page = index + 1;
+        return `<button class="menu-pagination__page ${page === currentPage ? "is-active" : ""}"
+          type="button" data-page="${page}" aria-label="Страница ${page}"
+          aria-current="${page === currentPage ? "page" : "false"}">${page}</button>`;
+      }).join("");
+
+      prevButton.disabled = currentPage <= 1;
+      nextButton.disabled = currentPage >= totalPages;
+
+      pageNumbers.querySelectorAll<HTMLButtonElement>("[data-page]").forEach((button) => {
+        button.addEventListener("click", () => {
+          currentPage = Number(button.dataset.page || 1);
+          renderGrid();
+        });
       });
     };
 
     const renderGrid = () => {
       const visible = visibleProducts();
-      resultCount.textContent = `${visible.length} ${visible.length === 1 ? "напиток" : visible.length < 5 ? "напитка" : "напитков"}`;
+      const totalPages = Math.max(1, Math.ceil(visible.length / pageSize));
+      currentPage = Math.min(currentPage, totalPages);
+      const start = (currentPage - 1) * pageSize;
+      const pageItems = visible.slice(start, start + pageSize);
+
+      resultCount.textContent = `${visible.length} ${pluralProducts(visible.length)}`;
       emptyState.hidden = visible.length > 0;
       grid.hidden = visible.length === 0;
 
-      grid.innerHTML = visible.map((product) => {
+      grid.innerHTML = pageItems.map((product) => {
         const price = product.catalogPrice || product.sizes[0];
         const selected = product.id === selectedId;
         return `<article class="product-card ${selected ? "is-selected" : ""}" data-product-card="${escapeHtml(product.id)}">
@@ -216,12 +265,16 @@ const initialProducts = products.map((product) => ({
         </article>`;
       }).join("");
 
+      renderPagination(totalPages);
+
       if (selectedId && !visible.some((product) => product.id === selectedId)) {
         selectedId = visible[0]?.id ?? null;
         selectedSizeIndex = 0;
+        detailWasOpenedByUser = false;
       } else if (!selectedId && visible.length) {
         selectedId = visible[0].id;
       }
+
       renderDetail();
       grid.querySelectorAll<HTMLButtonElement>("[data-select-product]").forEach((button) => {
         button.addEventListener("click", () => selectProduct(button.dataset.selectProduct || ""));
@@ -230,7 +283,6 @@ const initialProducts = products.map((product) => ({
 
     const renderDetail = () => {
       const product = products.find((item) => item.id === selectedId);
-      const closeButton = detail.querySelector<HTMLButtonElement>("#detail-close");
       if (!product) {
         detail.classList.remove("is-open");
         return;
@@ -239,7 +291,6 @@ const initialProducts = products.map((product) => ({
       if (selectedSizeIndex >= product.sizes.length) selectedSizeIndex = 0;
       const size = product.sizes[selectedSizeIndex] || product.catalogPrice || product.sizes[0];
 
-      detail.classList.add("is-open");
       detail.querySelector<HTMLElement>("#detail-category")!.textContent = product.categoryLabel;
       detail.querySelector<HTMLElement>("#detail-name")!.textContent = product.name;
       detail.querySelector<HTMLElement>("#detail-description")!.textContent =
@@ -249,11 +300,14 @@ const initialProducts = products.map((product) => ({
 
       const sizes = detail.querySelector<HTMLElement>("#detail-sizes")!;
       sizes.innerHTML = product.sizes.map((item, index) => `
-        <button class="product-size ${index === selectedSizeIndex ? "is-active" : ""}" type="button" data-size-index="${index}" aria-pressed="${index === selectedSizeIndex}">
-          <span>${escapeHtml(item.label)}</span>
-          <strong>${formatPrice(item.price)}</strong>
+        <button class="product-size ${index === selectedSizeIndex ? "is-active" : ""}" type="button"
+          data-size-index="${index}" aria-pressed="${index === selectedSizeIndex}">
+          <span>${escapeHtml(item.label)}</span><strong>${formatPrice(item.price)}</strong>
         </button>
       `).join("");
+
+      const shouldOpen = !mobileQuery.matches || detailWasOpenedByUser;
+      detail.classList.toggle("is-open", shouldOpen);
 
       sizes.querySelectorAll<HTMLButtonElement>("[data-size-index]").forEach((button) => {
         button.addEventListener("click", () => {
@@ -262,7 +316,6 @@ const initialProducts = products.map((product) => ({
           renderGridSelection();
         });
       });
-      closeButton?.addEventListener("click", closeDetail, { once: true });
     };
 
     const renderGridSelection = () => {
@@ -275,17 +328,27 @@ const initialProducts = products.map((product) => ({
       if (!products.some((product) => product.id === id)) return;
       selectedId = id;
       selectedSizeIndex = 0;
+      detailWasOpenedByUser = true;
       renderGridSelection();
       renderDetail();
-      detail.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+      if (mobileQuery.matches) {
+        detail.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      }
     };
 
-    const closeDetail = () => detail.classList.remove("is-open");
+    const closeDetail = () => {
+      detailWasOpenedByUser = false;
+      detail.classList.remove("is-open");
+    };
+
+    closeDetailButton.addEventListener("click", closeDetail);
 
     document.querySelectorAll<HTMLButtonElement>("[data-filter]").forEach((button) => {
       button.addEventListener("click", () => {
         activeFilter = button.dataset.filter || "all";
-        document.querySelectorAll("[data-filter]").forEach((item) => {
+        currentPage = 1;
+        document.querySelectorAll<HTMLButtonElement>("[data-filter]").forEach((item) => {
           const active = item === button;
           item.classList.toggle("is-active", active);
           item.setAttribute("aria-pressed", String(active));
@@ -295,14 +358,24 @@ const initialProducts = products.map((product) => ({
     });
 
     searchInput.addEventListener("input", () => {
+      currentPage = 1;
       clearSearch.hidden = searchInput.value.length === 0;
+
+      // При поиске закрываем мобильную панель подробностей
+      if (mobileQuery.matches) {
+        detailWasOpenedByUser = false;
+        detail.classList.remove("is-open");
+      }
+
       renderGrid();
     });
 
     const reset = () => {
       activeFilter = "all";
+      currentPage = 1;
       searchInput.value = "";
       clearSearch.hidden = true;
+      detailWasOpenedByUser = false;
       document.querySelectorAll<HTMLButtonElement>("[data-filter]").forEach((button) => {
         const active = button.dataset.filter === "all";
         button.classList.toggle("is-active", active);
@@ -311,14 +384,35 @@ const initialProducts = products.map((product) => ({
       renderGrid();
     };
 
+    prevButton.addEventListener("click", () => {
+      if (currentPage > 1) {
+        currentPage -= 1;
+        renderGrid();
+      }
+    });
+    nextButton.addEventListener("click", () => {
+      const totalPages = Math.ceil(visibleProducts().length / pageSize);
+      if (currentPage < totalPages) {
+        currentPage += 1;
+        renderGrid();
+      }
+    });
+
     clearSearch.addEventListener("click", () => {
       searchInput.value = "";
+      currentPage = 1;
       clearSearch.hidden = true;
       renderGrid();
       searchInput.focus();
     });
+
     document.querySelector<HTMLButtonElement>("#menu-reset")?.addEventListener("click", reset);
     document.querySelector<HTMLButtonElement>("#menu-empty-reset")?.addEventListener("click", reset);
+
+    mobileQuery.addEventListener("change", () => {
+      detailWasOpenedByUser = false;
+      renderDetail();
+    });
 
     renderGrid();
   }

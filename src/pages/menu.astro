@@ -1,11 +1,17 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
+import Header from "../components/layout/Header.astro";
 import MenuCatalog from "../components/menu/MenuCatalog.astro";
+import Footer from "../components/home/Footer.astro";
+
 ---
 
 <MainLayout
   title="Меню напитков — StreetCoffe"
   description="Кофе, чай, холодные напитки и другие позиции меню StreetCoffe в Тольятти."
 >
+  <Header />
   <MenuCatalog />
+  <Footer />
+
 </MainLayout>

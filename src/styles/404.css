@@ -323,14 +323,29 @@
    HEADER FIX FOR 404
 ========================================= */
 
-.error-page header a,
+/* =========================================
+   HEADER FIX FOR 404
+========================================= */
+
+.error-page header a:not(.mobile-nav-cta),
 .error-page header nav a {
   color: #f8f7f5;
   text-decoration: none;
 }
 
-.error-page header a:hover,
+.error-page header a:not(.mobile-nav-cta):hover,
 .error-page header nav a:hover {
   color: #d99a61;
   text-decoration: none;
+}
+
+/* Кнопка каталога в мобильном меню */
+.error-page header .mobile-nav-cta {
+  color: #111 !important;
+  background: #f8f7f5;
+}
+
+.error-page header .mobile-nav-cta:hover {
+  color: #111 !important;
+  background: #d99a61;
 }
