@@ -15,6 +15,7 @@ export type ProductCategory =
   | "cold"
   | "hot"
   | "milkshakes"
+  | "bubble-tea"
   | "other";
 
 export type ProductSize = {
@@ -54,6 +55,7 @@ export const categoryLabels: Record<ProductCategory, string> = {
   cold: "Холодные напитки",
   hot: "Горячие напитки",
   milkshakes: "Молочные коктейли",
+  "bubble-tea": "Bubble Tea",
   other: "Другое",
 };
 
@@ -431,6 +433,47 @@ export const products: Product[] = [
     image: "",
     isAvailable: true,
   },
+
+    // --------------------------------------------------
+  // BUBBLE TEA
+  // --------------------------------------------------
+  ...[
+    // BUBBLE TEA
+    ["bubble-tea-blueberry-banana", "Bubble Tea Чер-гол-банан", [319, 369], ["bubble tea", "чер-гол-банан", "черника", "голубика", "банан"]],
+    ["bubble-tea-kiwi-feijoa", "Bubble Tea Киви фейхоа", [319, 369], ["bubble tea", "киви", "фейхоа"]],
+    ["bubble-tea-mango-lychee", "Bubble Tea Манго личи", [319, 369], ["bubble tea", "манго", "личи"]],
+    ["bubble-tea-melon-lemongrass", "Bubble Tea Дыня лемонграсс", [319, 369], ["bubble tea", "дыня", "лемонграсс"]],
+    ["bubble-tea-watermelon-aloe", "Bubble Tea Арбуз алоэ", [319, 369], ["bubble tea", "арбуз", "алоэ"]],
+
+    // BUBBLE ICE
+    ["bubble-ice-blueberry-banana", "Bubble Ice Чер-гол-банан", [319, 369], ["bubble ice", "чер-гол-банан", "черника", "голубика", "банан"]],
+    ["bubble-ice-kiwi-feijoa", "Bubble Ice Киви фейхоа", [319, 369], ["bubble ice", "киви", "фейхоа"]],
+    ["bubble-ice-mango-lychee", "Bubble Ice Манго личи", [319, 369], ["bubble ice", "манго", "личи"]],
+    ["bubble-ice-melon-lemongrass", "Bubble Ice Дыня лемонграсс", [319, 369], ["bubble ice", "дыня", "лемонграсс"]],
+    ["bubble-ice-watermelon-aloe", "Bubble Ice Арбуз алоэ", [319, 369], ["bubble ice", "арбуз", "алоэ"]],
+
+    // BUBBLE COFFEE / MILK / OREO
+    ["bubble-coffee-blueberry-boom", "Bubble Coffee Черничный бум", [319, 369, 489], ["bubble coffee", "черничный бум", "черника"]],
+    ["bubble-coffee-apple-strudel", "Bubble Coffee Яблочный штрудель", [319, 369, 489], ["bubble coffee", "яблоко", "штрудель"]],
+    ["bubble-milk-raspberry-chocolate", "Bubble Milk Малина в шоколаде", [319, 369, 489], ["bubble milk", "малина", "шоколад"]],
+    ["bubble-oreo", "Bubble Oreo", [319, 369, 489], ["bubble", "oreo", "орео", "шоколад"]],
+    ["bubble-coffee-raspberry-mint", "Bubble Coffee Малина мята", [319, 369, 489], ["bubble coffee", "малина", "мята"]],
+  ].map(([id, name, prices, tags]) => ({
+    id: id as string,
+    name: name as string,
+    category: "bubble-tea" as const,
+    tags: tags as string[],
+    sizes: (prices as number[]).map((price, index) => ({
+      label: `${[375, 500, 600][index]} мл`,
+      volumeMl: [375, 500, 600][index],
+      price,
+    })),
+    description: "",
+    composition: [],
+    gallery: [],
+    image: "",
+    isAvailable: true,
+  })),
 
   // --------------------------------------------------
   // КОЛЛЕКЦИЯ ЧАЯ

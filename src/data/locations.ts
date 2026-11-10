@@ -14,7 +14,7 @@ export interface CoffeeLocation {
 export const locations: CoffeeLocation[] = [
   {
     id: 1,
-    name: "Набережная",
+    name: "Кофейня №1",
     address: "Спортивная, 31А",
     lng: 49.255842,
     lat: 53.507421,
@@ -26,19 +26,19 @@ export const locations: CoffeeLocation[] = [
   },
   {
     id: 2,
-    name: "1000 мелочей",
+    name: "Кофейня №2",
     address: "Юбилейная, 91А",
-    lng: null,
-    lat: null,
+    lng: 53.501993,
+    lat: 49.275666,
     image: "/locations/location-02.webp",
     hours: {
-      open: "00:00",
-      close: "23:59",
+      open: "07:00",
+      close: "23:00",
     },
   },
   {
     id: 3,
-    name: "Автопарк",
+    name: "Кофейня №3",
     address: "Юбилейная, 55/2",
     lng: 49.273105,
     lat: 53.518641,
@@ -50,7 +50,7 @@ export const locations: CoffeeLocation[] = [
   },
   {
     id: 4,
-    name: "Зелёнка",
+    name: "Кофейня №4",
     address: "Спортивная, 3А",
     lng: 49.277834,
     lat: 53.504958,
@@ -62,7 +62,7 @@ export const locations: CoffeeLocation[] = [
   },
   {
     id: 5,
-    name: "Революционная",
+    name: "Кофейня №5",
     address: "Революционная, 64А",
     lng: 49.273397,
     lat: 53.530349,
@@ -74,7 +74,7 @@ export const locations: CoffeeLocation[] = [
   },
   {
     id: 6,
-    name: "Итальянка",
+    name: "Кофейня №6",
     address: "Приморский бульвар, 37с1",
     lng: null,
     lat: null,
@@ -86,7 +86,7 @@ export const locations: CoffeeLocation[] = [
   },
   {
     id: 7,
-    name: "Приморский 1",
+    name: "Кофейня №7",
     address: "Строителей, 2А",
     lng: null,
     lat: null,
@@ -98,7 +98,7 @@ export const locations: CoffeeLocation[] = [
   },
   {
     id: 8,
-    name: "Приморский 2",
+    name: "Кофейня №8",
     address: "Строителей, 15",
     lng: null,
     lat: null,
